@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Tour - Pakistan Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+
+    /* --- Page Hero --- */
+    .page-hero {
+      background:
+        linear-gradient(180deg, rgba(22,48,42,0.72) 0%, rgba(22,48,42,0.88) 100%),
+        url('toursim pics/skardu.jpg') center/cover no-repeat;
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--parchment-50);
+    }
+    .page-hero h1 {
+      color: var(--parchment-50);
+      font-size: clamp(32px, 5vw, 52px);
+      margin-bottom: 12px;
+    }
+    .page-hero p {
+      font-size: 17px;
+      color: var(--sage-300);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* --- Booking Layout --- */
+    .booking-wrap {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 40px;
+      padding: 64px 0 80px;
+      align-items: start;
+    }
+
+    /* --- Form Card --- */
+    .form-card {
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+    }
+
+    .form-card h2 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .form-card > p {
+      color: var(--ink-600);
+      font-size: 15px;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line-200);
+    }
+
+    /* --- Form Groups --- */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-900);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--line-200);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: var(--font-body);
+      color: var(--ink-900);
+      background: white;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--pine-500);
+      box-shadow: 0 0 0 3px rgba(47, 97, 82, 0.12);
+    }
+
+    /* Error state */
+    .form-group input.error,
+    .form-group select.error {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #e53e3e;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--pine-700);
+      color: var(--parchment-50);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      font-family: var(--font-body);
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: var(--pine-500);
+      transform: translateY(-2px);
+    }
+
+    /* --- Success Message --- */
+    .success-box {
+      display: none;
+      background: #f0fff4;
+      border: 1.5px solid #38a169;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .success-box h3 {
+      color: #276749;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .success-box p {
+      color: #276749;
+      font-size: 14px;
+    }
+
+    /* --- Info Sidebar --- */
+    .info-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .info-card {
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+    }
+
+    .info-card h3 {
+      font-size: 17px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-200);
+    }
+
+    .info-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-200);
+      font-size: 14px;
+      color: var(--ink-600);
+    }
+
+    .info-list li:last-child { border-bottom: none; }
+
+    .info-icon {
+      font-size: 18px;
+      min-width: 24px;
+    }
+
+    /* Price estimator */
+    .price-box {
+      background: var(--pine-900);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      color: var(--parchment-50);
+    }
+
+    .price-box h3 {
+      color: var(--marigold-500);
+      font-size: 17px;
+      margin-bottom: 16px;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: var(--sage-300);
+    }
+
+    .price-row:last-of-type { border-bottom: none; }
+
+    .price-row strong {
+      color: var(--parchment-50);
+      font-size: 20px;
+    }
+
+    @media (max-width: 860px) {
+      .booking-wrap { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="packages.html">Packages</a></li>
+          <li><a href="trip-planner.html">Trip Planner</a></li>
+          <li><a href="travel-advisory.html">Advisory</a></li>
+          <li><a href="quiz.html" class="active">Quiz</a></li>
+          <li><a href="booking.html" class="active">Booking</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="review.html">Reviews</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="register.html" class="register-link">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <h1>Book Your Tour</h1>
+    <p>Fill in your details below — our team will confirm your booking within 24 hours.</p>
+  </section>
+
+  <!-- ===== BOOKING SECTION ===== -->
+  <main class="container">
+    <div class="booking-wrap">
+
+      <!-- LEFT: FORM -->
+      <div class="form-card">
+        <h2>Tour Booking Form</h2>
+        <p>All fields marked with * are required. We'll send a confirmation to your email.</p>
+
+        <!-- PERSONAL INFO -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="fullname" placeholder="Ali Ahmed">
+            <span class="error-msg" id="err-name">Please enter your full name</span>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="email" placeholder="ali@example.com">
+            <span class="error-msg" id="err-email">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="phone" placeholder="03001234567">
+            <span class="error-msg" id="err-phone">Please enter your phone number</span>
+          </div>
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" id="city" placeholder="Islamabad">
+            <span class="error-msg" id="err-city">Please enter your city</span>
+          </div>
+        </div>
+
+        <!-- TOUR INFO -->
+        <div class="form-group">
+          <label>Select Package *</label>
+          <select id="package">
+            <option value="">-- Choose a Package --</option>
+            <optgroup label="Family Packages">
+              <option value="hunza-family">Hunza Family Tour — PKR 15,000/person</option>
+              <option value="naran-family">Naran Kaghan Family Tour — PKR 6,000/person</option>
+              <option value="neelum-family">Neelum Valley Family Tour — PKR 12,000/person</option>
+              <option value="murree-family">Murree Family Tour — PKR 5,000/person</option>
+              <option value="swat-family">Swat Family Tour — PKR 11,000/person</option>
+            </optgroup>
+            <optgroup label="Honeymoon Packages">
+              <option value="hunza-honeymoon">Hunza Honeymoon Tour — PKR 20,000/couple</option>
+              <option value="skardu-honeymoon">Skardu Honeymoon Tour — PKR 25,000/couple</option>
+              <option value="murree-couple">Murree Couple Tour — PKR 8,000/couple</option>
+              <option value="neelum-honeymoon">Neelum Valley Honeymoon — PKR 15,000/couple</option>
+              <option value="nathiagali-couple">Nathia Gali Couple Tour — PKR 9,000/couple</option>
+            </optgroup>
+            <optgroup label="Historical Tours">
+              <option value="lahore-heritage">Lahore Heritage Tour — PKR 7,000/person</option>
+              <option value="taxila">Taxila Day Tour — PKR 4,000/person</option>
+              <option value="rohtas">Rohtas Fort Tour — PKR 6,000/person</option>
+              <option value="mohenjo">Mohenjo-daro Tour — PKR 12,000/person</option>
+              <option value="islamabad-heritage">Islamabad Heritage Tour — PKR 3,000/person</option>
+            </optgroup>
+            <optgroup label="Student / Budget">
+              <option value="murree-student">Murree Student Trip — PKR 5,000/person</option>
+              <option value="nathiagali-budget">Nathia Gali Budget Trip — PKR 5,000/person</option>
+              <option value="islamabad-city">Islamabad City Tour — PKR 2,000/person</option>
+              <option value="khanpur">Khanpur Dam Trip — PKR 3,000/person</option>
+              <option value="swat-budget">Swat Budget Trip — PKR 8,000/person</option>
+            </optgroup>
+            <optgroup label="Adventure">
+              <option value="fairy-meadows">Fairy Meadows Trek — PKR 18,000/person</option>
+              <option value="northern-grand">Northern Grand Tour — PKR 22,000/person</option>
+              <option value="lakes-tour">Lakes Exploration Tour — PKR 15,000/person</option>
+              <option value="waterfall-adventure">Waterfall Adventure Tour — PKR 7,000/person</option>
+              <option value="winter-snow">Winter Snow Package — PKR 10,000/person</option>
+            </optgroup>
+          </select>
+          <span class="error-msg" id="err-package">Please select a package</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Travel Date *</label>
+            <input type="date" id="travel-date">
+            <span class="error-msg" id="err-date">Please select a travel date</span>
+          </div>
+          <div class="form-group">
+            <label>Number of Travelers *</label>
+            <select id="travelers">
+              <option value="">-- Select --</option>
+              <option value="1">1 Person</option>
+              <option value="2">2 People</option>
+              <option value="3">3 People</option>
+              <option value="4">4 People</option>
+              <option value="5">5 People</option>
+              <option value="6+">6+ People</option>
+            </select>
+            <span class="error-msg" id="err-travelers">Please select number of travelers</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Special Requests (Optional)</label>
+          <textarea id="requests" placeholder="Any special requirements? e.g. vegetarian meals, wheelchair access, specific hotel preference..."></textarea>
+        </div>
+
+        <button class="submit-btn" onclick="submitBooking()">
+          Confirm Booking →
+        </button>
+
+        <!-- Success Message -->
+        <div class="success-box" id="success-box">
+          <h3>✅ Booking Received!</h3>
+          <p>Thank you! for choosing Pakistan Explorer.
+
+Your booking has been received successfully.
+
+Our team will contact you immediately via phone, email or WhatsApp to confirm your booking.</p>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: SIDEBAR -->
+      <div class="info-sidebar">
+
+        <!-- Why Book With Us -->
+        <div class="info-card">
+          <h3>Why Book With Us?</h3>
+          <ul class="info-list">
+            <li>
+              <span class="info-icon">✅</span>
+              <span><strong>Verified Guides</strong> — All our guides are locally certified and experienced</span>
+            </li>
+            <li>
+              <span class="info-icon">💰</span>
+              <span><strong>Best Price Guarantee</strong> — We match any lower price you find</span>
+            </li>
+            <li>
+              <span class="info-icon">📞</span>
+              <span><strong>24/7 Support</strong> — Our team is available throughout your trip</span>
+            </li>
+            <li>
+              <span class="info-icon">🔄</span>
+              <span><strong>Free Cancellation</strong> — Cancel up to 48 hours before travel</span>
+            </li>
+            <li>
+              <span class="info-icon">🛡️</span>
+              <span><strong>Safe & Secure</strong> — All tours are safety-checked and insured</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Price Estimator -->
+        <div class="price-box">
+          <h3>💡 Price Estimator</h3>
+          <div class="price-row">
+            <span>Selected Package</span>
+            <span id="est-package">—</span>
+          </div>
+          <div class="price-row">
+            <span>Travelers</span>
+            <span id="est-travelers">—</span>
+          </div>
+          <div class="price-row">
+            <span>Price Per Person</span>
+            <span id="est-price">—</span>
+          </div>
+          <div class="price-row">
+            <span>Estimated Total</span>
+            <strong id="est-total">—</strong>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="info-card">
+          <h3>Need Help?</h3>
+          <ul class="info-list">
+            <li>
+              <span class="info-icon">📞</span>
+              <span>+92 3239399316</span>
+            </li>
+            <li>
+              <span class="info-icon">✉️</span>
+              <span>ali5136519@gmail.com</span>
+            </li>
+            <li>
+              <span class="info-icon">🕐</span>
+              <span>Mon–Sat, 9am to 9pm</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Pakistan Explorer</h4>
+          <p>A platform for discovering and booking domestic tourism experiences across Pakistan.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="packages.html">Packages</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="review.html">Reviews</a></li>
+          </ul>
+        </div>
+        <div>
+          <div>
+
+  <h4>Contact</h4>
+
+  <p>Islamabad, Pakistan</p>
+
+  <a href="mailto:ali5136519@gmail.com"
+
+     style="color:var(--sage-300);font-size:14px;">
+
+ali5136519@gmail.com
+
+  </a>
+
+  <br>
+
+  <a href="https://wa.me/923239399316"
+
+     target="_blank"
+
+     style="color:#25D366;font-size:14px;font-weight:600;margin-top:8px;display:inline-block;">
+
+    💬 WhatsApp Us
+
+  </a>
+
+</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Pakistan Explorer — Islamabad.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    const packagePrices = {
+      'hunza-family': 15000,
+      'naran-family': 6000,
+      'neelum-family': 12000,
+      'murree-family': 5000,
+      'swat-family': 11000,
+      'hunza-honeymoon': 20000,
+      'skardu-honeymoon': 25000,
+      'murree-couple': 8000,
+      'neelum-honeymoon': 15000,
+      'nathiagali-couple': 9000,
+      'lahore-heritage': 7000,
+      'taxila': 4000,
+      'rohtas': 6000,
+      'mohenjo': 12000,
+      'islamabad-heritage': 3000,
+      'murree-student': 5000,
+      'nathiagali-budget': 5000,
+      'islamabad-city': 2000,
+      'khanpur': 3000,
+      'swat-budget': 8000,
+      'fairy-meadows': 18000,
+      'northern-grand': 22000,
+      'lakes-tour': 15000,
+      'waterfall-adventure': 7000,
+      'winter-snow': 10000
+    };
+
+   
+    function updateEstimate() {
+      const pkgSelect = document.getElementById('package');
+      const travelersSelect = document.getElementById('travelers');
+      const pkgValue = pkgSelect.value;
+      const travelers = travelersSelect.value;
+      const pkgText = pkgSelect.options[pkgSelect.selectedIndex].text;
+
+      if (pkgValue && travelers && travelers !== '6+') {
+        const pricePerPerson = packagePrices[pkgValue];
+        const total = pricePerPerson * parseInt(travelers);
+        document.getElementById('est-package').textContent = pkgText.split('—')[0].trim();
+        document.getElementById('est-travelers').textContent = travelers + ' person(s)';
+        document.getElementById('est-price').textContent = 'PKR ' + pricePerPerson.toLocaleString();
+        document.getElementById('est-total').textContent = 'PKR ' + total.toLocaleString();
+      } else if (pkgValue && travelers === '6+') {
+        document.getElementById('est-package').textContent = pkgText.split('—')[0].trim();
+        document.getElementById('est-travelers').textContent = '6+ persons';
+        document.getElementById('est-price').textContent = 'Contact us';
+        document.getElementById('est-total').textContent = 'Custom Quote';
+      }
+    }
+
+    document.getElementById('package').addEventListener('change', updateEstimate);
+    document.getElementById('travelers').addEventListener('change', updateEstimate);
+
+    
+    async function submitBooking() {
+      let isValid = true;
+
+      function validate(fieldId, errorId, condition) {
+        const field = document.getElementById(fieldId);
+        const error = document.getElementById(errorId);
+        if (condition) {
+          field.classList.add('error');
+          error.style.display = 'block';
+          isValid = false;
+        } else {
+          field.classList.remove('error');
+          error.style.display = 'none';
+        }
+      }
+
+      validate('fullname', 'err-name',
+        document.getElementById('fullname').value.trim() === '');
+      validate('email', 'err-email',
+        !document.getElementById('email').value.includes('@'));
+      validate('phone', 'err-phone',
+        document.getElementById('phone').value.trim().length < 10);
+      validate('city', 'err-city',
+        document.getElementById('city').value.trim() === '');
+      validate('package', 'err-package',
+        document.getElementById('package').value === '');
+      validate('travel-date', 'err-date',
+        document.getElementById('travel-date').value === '');
+      validate('travelers', 'err-travelers',
+        document.getElementById('travelers').value === '');
+
+      if (isValid) {
+
+        
+        const token = localStorage.getItem('pe_token');
+
+        if (!token) {
+          alert('Please login first to make a booking.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        
+        const pkgValue = document.getElementById('package').value;
+        const travelers = parseInt(document.getElementById('travelers').value) || 1;
+        const packagePrice = packagePrices[pkgValue] || 0;
+        const totalAmount = packagePrice * travelers;
+
+       
+        const pkgSelect = document.getElementById('package');
+        const packageName = pkgSelect.options[pkgSelect.selectedIndex].text.split('—')[0].trim();
+
+        const btn = document.querySelector('.submit-btn');
+        btn.textContent = 'Submitting...';
+        btn.disabled = true;
+
+        try {
+
+          const response = await fetch('http://localhost:5000/api/bookings', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+              fullName: document.getElementById('fullname').value.trim(),
+              email: document.getElementById('email').value.trim(),
+              phone: document.getElementById('phone').value.trim(),
+              city: document.getElementById('city').value.trim(),
+              packageName: packageName,
+              packagePrice: packagePrice,
+              travelDate: document.getElementById('travel-date').value,
+              travelers: travelers,
+              totalAmount: totalAmount,
+              specialRequests: document.getElementById('requests').value.trim()
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+           
+            document.getElementById('success-box').style.display = 'block';
+            window.scrollTo({
+              top: document.getElementById('success-box').offsetTop - 100,
+              behavior: 'smooth'
+            });
+
+            
+            document.getElementById('fullname').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('package').value = '';
+            document.getElementById('travel-date').value = '';
+            document.getElementById('travelers').value = '';
+            document.getElementById('requests').value = '';
+
+            btn.textContent = 'Confirm Booking →';
+            btn.disabled = false;
+
+          } else if (response.status === 401) {
+           
+            alert('Session expired. Please login again.');
+            localStorage.removeItem('pe_token');
+            localStorage.removeItem('pe_user');
+            window.location.href = 'login.html';
+
+          } else {
+            alert(data.message || 'Booking failed. Please try again.');
+            btn.textContent = 'Confirm Booking →';
+            btn.disabled = false;
+          }
+
+        } catch (error) {
+          alert('Cannot connect to server. Please try again.');
+          btn.textContent = 'Confirm Booking →';
+          btn.disabled = false;
+        }
+      }
+    }
+
+</script>
+        
+  </script>
+
+</body>
+</html>

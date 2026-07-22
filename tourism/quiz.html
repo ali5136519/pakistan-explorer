@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pakistan Tourism Quiz - Pakistan Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      background:
+        linear-gradient(rgba(22,48,42,0.75), rgba(22,48,42,0.88)),
+        url('toursim pics/hunza valley.jpg') center/cover no-repeat;
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--parchment-50);
+    }
+    .page-hero h1 { color: var(--parchment-50); font-size: clamp(32px, 5vw, 52px); margin-bottom: 12px; }
+    .page-hero p { font-size: 17px; color: var(--sage-300); max-width: 560px; margin: 0 auto; }
+
+    .quiz-section { padding: 64px 0 80px; }
+
+    .quiz-wrap { max-width: 720px; margin: 0 auto; }
+
+    /* START SCREEN */
+    .start-screen {
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+    }
+
+    .start-icon { font-size: 64px; margin-bottom: 20px; }
+    .start-screen h2 { font-size: 28px; margin-bottom: 12px; }
+    .start-screen p { color: var(--ink-600); font-size: 15px; margin-bottom: 32px; line-height: 1.7; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+    .quiz-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .quiz-stat {
+      background: var(--parchment-100);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 1px solid var(--line-200);
+    }
+
+    .quiz-stat .stat-num {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--pine-700);
+      display: block;
+    }
+
+    .quiz-stat .stat-label { font-size: 13px; color: var(--ink-600); }
+
+    .start-btn {
+      padding: 16px 48px;
+      background: var(--pine-700);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .start-btn:hover { background: var(--pine-500); transform: translateY(-2px); }
+
+    /* QUIZ SCREEN */
+    .quiz-screen { display: none; }
+
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .quiz-progress-text { font-size: 14px; color: var(--ink-600); font-weight: 600; }
+
+    .quiz-score-display {
+      background: var(--pine-700);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .progress-bar-wrap {
+      background: var(--line-200);
+      border-radius: 999px;
+      height: 8px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pine-700), var(--marigold-500));
+      border-radius: 999px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .question-card {
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+      margin-bottom: 24px;
+    }
+
+    .question-category {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--rust-500);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .question-text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--pine-900);
+      line-height: 1.4;
+      margin-bottom: 28px;
+    }
+
+    .question-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .option-btn {
+      padding: 16px 20px;
+      border: 2px solid var(--line-200);
+      border-radius: var(--radius-md);
+      background: white;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink-900);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      line-height: 1.4;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--pine-500);
+      background: rgba(47,97,82,0.04);
+      transform: translateY(-2px);
+    }
+
+    .option-letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--parchment-100);
+      border: 1.5px solid var(--line-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      color: var(--ink-600);
+    }
+
+    .option-btn.correct {
+      border-color: #38a169;
+      background: rgba(56,161,105,0.08);
+      color: #276749;
+    }
+
+    .option-btn.correct .option-letter {
+      background: #38a169;
+      color: white;
+      border-color: #38a169;
+    }
+
+    .option-btn.wrong {
+      border-color: #e53e3e;
+      background: rgba(229,62,62,0.06);
+      color: #9b2335;
+    }
+
+    .option-btn.wrong .option-letter {
+      background: #e53e3e;
+      color: white;
+      border-color: #e53e3e;
+    }
+
+    .option-btn:disabled { cursor: not-allowed; }
+
+    .feedback-box {
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 16px;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .feedback-box.correct { background: #f0fff4; border: 1.5px solid #68d391; color: #276749; }
+    .feedback-box.wrong { background: #fff5f5; border: 1.5px solid #fc8181; color: #9b2335; }
+
+    .next-btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--marigold-500);
+      color: var(--pine-900);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s, transform 0.2s;
+      display: none;
+    }
+
+    .next-btn:hover { background: var(--marigold-600); transform: translateY(-2px); }
+
+    /* RESULT SCREEN */
+    .result-screen {
+      display: none;
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+    }
+
+    .result-icon { font-size: 72px; margin-bottom: 16px; }
+    .result-title { font-size: 30px; margin-bottom: 8px; }
+    .result-subtitle { color: var(--ink-600); font-size: 16px; margin-bottom: 32px; }
+
+    .score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 8px solid var(--pine-700);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+    }
+
+    .score-number {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--pine-700);
+      line-height: 1;
+    }
+
+    .score-total { font-size: 14px; color: var(--ink-600); }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .result-stat {
+      background: var(--parchment-100);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      border: 1px solid var(--line-200);
+    }
+
+    .result-stat .num { font-family: var(--font-display); font-size: 24px; font-weight: 700; display: block; }
+    .result-stat .num.green { color: #38a169; }
+    .result-stat .num.red { color: #e53e3e; }
+    .result-stat .num.blue { color: #3182ce; }
+    .result-stat .lbl { font-size: 13px; color: var(--ink-600); }
+
+    .badge-box {
+      background: linear-gradient(135deg, var(--pine-900), var(--pine-700));
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .badge-box .badge-icon { font-size: 40px; margin-bottom: 8px; }
+    .badge-box h3 { font-size: 20px; margin-bottom: 4px; }
+    .badge-box p { font-size: 14px; opacity: 0.8; }
+
+    .result-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .retry-btn {
+      padding: 14px 36px;
+      background: var(--pine-700);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .retry-btn:hover { background: var(--pine-500); transform: translateY(-2px); }
+
+    .explore-btn {
+      padding: 14px 36px;
+      background: var(--marigold-500);
+      color: var(--pine-900);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .explore-btn:hover { background: var(--marigold-600); transform: translateY(-2px); }
+
+    @media (max-width: 600px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .quiz-stats, .result-stats { grid-template-columns: 1fr; }
+      .question-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="packages.html">Packages</a></li>
+          <li><a href="trip-planner.html">Trip Planner</a></li>
+          <li><a href="travel-advisory.html">Advisory</a></li>
+          <li><a href="quiz.html" class="active">Quiz</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="review.html">Reviews</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="register.html" class="register-link">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <h1>Pakistan Tourism Quiz</h1>
+    <p>Test your knowledge about Pakistan's most beautiful destinations — lakes, mountains, heritage sites, and more.</p>
+  </section>
+
+  <section class="quiz-section">
+    <div class="container">
+      <div class="quiz-wrap">
+
+        <!-- START SCREEN -->
+        <div class="start-screen" id="start-screen">
+          <div class="start-icon">🗺️</div>
+          <h2>How Well Do You Know Pakistan?</h2>
+          <p>15 questions covering lakes, northern areas, historical places, hill stations, and waterfalls — all from destinations on this website.</p>
+          <div class="quiz-stats">
+            <div class="quiz-stat">
+              <span class="stat-num">15</span>
+              <span class="stat-label">Questions</span>
+            </div>
+            <div class="quiz-stat">
+              <span class="stat-num">5</span>
+              <span class="stat-label">Categories</span>
+            </div>
+            <div class="quiz-stat">
+              <span class="stat-num">~5</span>
+              <span class="stat-label">Minutes</span>
+            </div>
+          </div>
+          <button class="start-btn" onclick="startQuiz()">Start Quiz 🚀</button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div class="quiz-screen" id="quiz-screen">
+          <div class="quiz-header">
+            <span class="quiz-progress-text" id="progress-text">Question 1 of 15</span>
+            <span class="quiz-score-display" id="score-display">Score: 0</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <div class="question-card">
+            <span class="question-category" id="q-category"></span>
+            <img class="question-img" id="q-img" src="" alt="">
+            <p class="question-text" id="q-text"></p>
+            <div class="options-grid" id="options-grid"></div>
+            <div class="feedback-box" id="feedback-box"></div>
+          </div>
+          <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div class="result-screen" id="result-screen"></div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div><h4>Pakistan Explorer</h4><p>A platform for discovering and booking domestic tourism experiences across Pakistan.</p></div>
+        <div><h4>Explore</h4><ul><li><a href="destinations.html">Destinations</a></li><li><a href="packages.html">Packages</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+        <div><h4>Company</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="review.html">Reviews</a></li></ul></div>
+        <div>
+
+  <h4>Contact</h4>
+
+  <p>Islamabad, Pakistan</p>
+
+  <a href="mailto:ali5136519@gmail.com"
+
+     style="color:var(--sage-300);font-size:14px;">
+
+ali5136519@gmail.com
+
+  </a>
+
+  <br>
+
+  <a href="https://wa.me/923239399316"
+
+     target="_blank"
+
+     style="color:#25D366;font-size:14px;font-weight:600;margin-top:8px;display:inline-block;">
+
+    💬 WhatsApp Us
+
+  </a>
+
+</div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Pakistan Explorer — Islamabad.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+
+    const questions = [
+
+      // LAKES (3)
+      {
+        category: '🏞 Lakes of Pakistan',
+        img: 'toursim pics/attabad lake.jpg',
+        text: 'Attabad Lake in Hunza — how did this stunning turquoise lake form?',
+        options: ['It is a natural glacier lake', 'It formed after a 2010 landslide', 'It was created by a dam', 'It has existed for centuries'],
+        correct: 1,
+        fact: 'Attabad Lake formed in January 2010 when a massive landslide blocked the Hunza River — creating one of Pakistan\'s most beautiful and dramatic landscapes.'
+      },
+      {
+        category: '🏞 Lakes of Pakistan',
+        img: 'toursim pics/sheosar lake.jpg',
+        text: 'Sheosar Lake is located in which famous national park of Pakistan?',
+        options: ['Khunjerab National Park', 'Hingol National Park', 'Deosai National Park', 'Ayubia National Park'],
+        correct: 2,
+        fact: 'Sheosar Lake sits inside Deosai National Park — one of the world\'s highest plateaus at 4,114 metres above sea level.'
+      },
+      {
+        category: '🏞 Lakes of Pakistan',
+        img: 'toursim pics/saif ul malook.jpg',
+        text: 'Saif-ul-Malook lake is named after a famous Punjabi romantic poem. What is it known for locally?',
+        options: ['It never freezes in winter', 'It is the deepest lake in Pakistan', 'It is wrapped in legend and folklore', 'It has no fish'],
+        correct: 2,
+        fact: 'Saif-ul-Malook is associated with a famous Punjabi folk tale by Mian Muhammad Bakhsh about a prince falling in love with a fairy at this very lake.'
+      },
+
+      // NORTHERN AREAS (3)
+      {
+        category: '🏔 Northern Areas',
+        img: 'toursim pics/hunza valley.jpg',
+        text: 'Hunza Valley is located along which famous international highway?',
+        options: ['Grand Trunk Road', 'Karakoram Highway', 'Coastal Highway', 'M-2 Motorway'],
+        correct: 1,
+        fact: 'The Karakoram Highway (KKH) connects Pakistan and China — running through Hunza Valley. It is one of the highest paved roads in the world.'
+      },
+      {
+        category: '🏔 Northern Areas',
+        img: 'toursim pics/fairy medeows.jpg',
+        text: 'Fairy Meadows is located at the base of which of the world\'s highest mountains?',
+        options: ['K2', 'Broad Peak', 'Nanga Parbat', 'Gasherbrum'],
+        correct: 2,
+        fact: 'Fairy Meadows sits at the base of Nanga Parbat — the world\'s 9th highest mountain at 8,126 metres. It is also called the Killer Mountain.'
+      },
+      {
+        category: '🏔 Northern Areas',
+        img: 'toursim pics/khanjerab pass.jpg',
+        text: 'Khunjerab Pass is the border crossing between Pakistan and which country?',
+        options: ['India', 'Afghanistan', 'Iran', 'China'],
+        correct: 3,
+        fact: 'Khunjerab Pass at 4,693 metres is the highest paved international border crossing in the world — connecting Pakistan\'s Gilgit-Baltistan with China\'s Xinjiang province.'
+      },
+
+      // HISTORICAL PLACES (3)
+      {
+        category: '🏛 Historical Places',
+        img: 'toursim pics/badshahi mosque.jpg',
+        text: 'Badshahi Mosque in Lahore was built during which empire?',
+        options: ['British Empire', 'Sikh Empire', 'Mughal Empire', 'Ottoman Empire'],
+        correct: 2,
+        fact: 'Badshahi Mosque was built in 1673 by Mughal Emperor Aurangzeb. For nearly 300 years it was the world\'s largest mosque.'
+      },
+      {
+        category: '🏛 Historical Places',
+        img: 'toursim pics/mohenjdaro .jpg',
+        text: 'Mohenjo-daro in Sindh is a site of which ancient civilization?',
+        options: ['Mesopotamian Civilization', 'Indus Valley Civilization', 'Egyptian Civilization', 'Persian Civilization'],
+        correct: 1,
+        fact: 'Mohenjo-daro is one of the largest cities of the ancient Indus Valley Civilization — built around 2500 BCE. It is a UNESCO World Heritage Site.'
+      },
+      {
+        category: '🏛 Historical Places',
+        img: 'toursim pics/rohtas fort.jpg',
+        text: 'Rohtas Fort near Jhelum was built by which Afghan ruler in the 16th century?',
+        options: ['Babur', 'Akbar', 'Sher Shah Suri', 'Humayun'],
+        correct: 2,
+        fact: 'Rohtas Fort was built by Sher Shah Suri in 1541 to suppress the Gakhar tribes loyal to the Mughal Emperor Humayun. It is a UNESCO World Heritage Site.'
+      },
+
+      // HILL STATIONS (3)
+      {
+        category: '⛰ Hill Stations',
+        img: 'toursim pics/malam jabba.jpg',
+        text: 'Malam Jabba in Swat is famous for being Pakistan\'s only what?',
+        options: ['Cable Car Resort', 'Ski Resort', 'Paragliding Centre', 'Bungee Jumping Site'],
+        correct: 1,
+        fact: 'Malam Jabba is Pakistan\'s only operational ski resort — located at 2,804 metres in the Swat Valley. It offers skiing in winter and a chairlift with stunning views in summer.'
+      },
+      {
+        category: '⛰ Hill Stations',
+        img: 'toursim pics/swat .jpg',
+        text: 'Swat Valley is often called the "Switzerland of Pakistan" — but historically it was also a major centre of which religion?',
+        options: ['Hinduism', 'Zoroastrianism', 'Buddhism', 'Sikhism'],
+        correct: 2,
+        fact: 'Swat Valley has hundreds of Buddhist archaeological sites — including stupas, monasteries, and carvings dating back 2,000 years. Taxila nearby was also a major Buddhist learning centre.'
+      },
+      {
+        category: '⛰ Hill Stations',
+        img: 'toursim pics/neelum valley.jpg',
+        text: 'Neelum Valley is located in which region of Pakistan?',
+        options: ['Gilgit-Baltistan', 'Azad Jammu & Kashmir', 'KPK', 'Punjab'],
+        correct: 1,
+        fact: 'Neelum Valley is in Azad Jammu & Kashmir — a 200km long valley following the turquoise Neelum River. It is one of the most scenic valleys in the entire country.'
+      },
+
+      // WATERFALLS (3)
+      {
+        category: '💧 Waterfalls',
+        img: 'toursim pics/manthokha waterfall.jpg',
+        text: 'Manthokha Waterfall — one of Pakistan\'s highest — is located near which city in Gilgit-Baltistan?',
+        options: ['Hunza', 'Gilgit', 'Skardu', 'Chilas'],
+        correct: 2,
+        fact: 'Manthokha Waterfall is located in Kharmang district near Skardu. It falls approximately 60 metres and is surrounded by lush greenery — a hidden gem of GB.'
+      },
+      {
+        category: '💧 Waterfalls',
+        img: 'toursim pics/umbrella waterfall.jpg',
+        text: 'Umbrella Waterfall gets its name from its unique shape. It is located near which city in KPK?',
+        options: ['Peshawar', 'Swat', 'Abbottabad', 'Mansehra'],
+        correct: 2,
+        fact: 'Umbrella Waterfall near Abbottabad spreads out in a fan or umbrella shape as it falls — making it one of the most uniquely shaped waterfalls in Pakistan.'
+      },
+      {
+        category: '💧 Waterfalls',
+        img: 'toursim pics/noori waterfall.jpg',
+        text: 'Noori Waterfall is a hidden gem located in which district of KPK?',
+        options: ['Abbottabad', 'Haripur', 'Mansehra', 'Swabi'],
+        correct: 1,
+        fact: 'Noori Waterfall is located in Haripur district — tucked deep inside a forest. It is less visited than other waterfalls making it perfect for those who want to avoid tourist crowds.'
+      }
+
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let answered = 0;
+    let correct = 0;
+    let wrong = 0;
+
+    function startQuiz() {
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'block';
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQ];
+
+      document.getElementById('progress-text').textContent =
+        'Question ' + (currentQ + 1) + ' of ' + questions.length;
+
+      document.getElementById('score-display').textContent = 'Score: ' + score;
+
+      const pct = (currentQ / questions.length) * 100;
+      document.getElementById('progress-bar').style.width = pct + '%';
+
+      document.getElementById('q-category').textContent = q.category;
+      document.getElementById('q-img').src = q.img;
+      document.getElementById('q-img').alt = q.text;
+      document.getElementById('q-text').textContent = q.text;
+
+      const letters = ['A', 'B', 'C', 'D'];
+      document.getElementById('options-grid').innerHTML = q.options.map((opt, i) => `
+        <button class="option-btn" onclick="selectAnswer(${i})" id="opt-${i}">
+          <span class="option-letter">${letters[i]}</span>
+          ${opt}
+        </button>
+      `).join('');
+
+      document.getElementById('feedback-box').style.display = 'none';
+      document.getElementById('feedback-box').className = 'feedback-box';
+      document.getElementById('next-btn').style.display = 'none';
+    }
+
+    function selectAnswer(selected) {
+      const q = questions[currentQ];
+
+      document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+
+      const selectedBtn = document.getElementById('opt-' + selected);
+      const correctBtn = document.getElementById('opt-' + q.correct);
+
+      const feedback = document.getElementById('feedback-box');
+      const nextBtn = document.getElementById('next-btn');
+
+      if (selected === q.correct) {
+        selectedBtn.classList.add('correct');
+        score += 10;
+        correct++;
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = '✅ <strong>Correct!</strong> ' + q.fact;
+      } else {
+        selectedBtn.classList.add('wrong');
+        correctBtn.classList.add('correct');
+        wrong++;
+        feedback.className = 'feedback-box wrong';
+        feedback.innerHTML = '❌ <strong>Wrong!</strong> ' + q.fact;
+      }
+
+      feedback.style.display = 'block';
+      answered++;
+
+      nextBtn.textContent = currentQ === questions.length - 1 ? 'See Results 🎉' : 'Next Question →';
+      nextBtn.style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-screen').style.display = 'none';
+
+      const pct = Math.round((correct / questions.length) * 100);
+
+      let badge, icon, title, subtitle;
+
+      if (pct === 100) {
+        icon = '🏆'; badge = 'Pakistan Tourism Expert'; title = 'Perfect Score!';
+        subtitle = 'You know Pakistan\'s destinations better than most travel guides!';
+      } else if (pct >= 80) {
+        icon = '🥇'; badge = 'Master Explorer'; title = 'Excellent!';
+        subtitle = 'You have outstanding knowledge of Pakistan\'s beautiful places!';
+      } else if (pct >= 60) {
+        icon = '🥈'; badge = 'Seasoned Traveler'; title = 'Well Done!';
+        subtitle = 'Great knowledge! A few more trips across Pakistan and you\'ll be an expert.';
+      } else if (pct >= 40) {
+        icon = '🥉'; badge = 'Curious Explorer'; title = 'Good Start!';
+        subtitle = 'You\'re on the right track — explore more destinations to boost your score!';
+      } else {
+        icon = '🗺️'; badge = 'New Adventurer'; title = 'Keep Learning!';
+        subtitle = 'Pakistan has so much to discover — browse our destinations and try again!';
+      }
+
+      const resultScreen = document.getElementById('result-screen');
+      resultScreen.style.display = 'block';
+
+      resultScreen.innerHTML = `
+        <div class="result-icon">${icon}</div>
+        <h2 class="result-title">${title}</h2>
+        <p class="result-subtitle">${subtitle}</p>
+
+        <div class="score-circle">
+          <span class="score-number">${correct}</span>
+          <span class="score-total">out of ${questions.length}</span>
+        </div>
+
+        <div class="result-stats">
+          <div class="result-stat">
+            <span class="num green">${correct}</span>
+            <span class="lbl">✅ Correct</span>
+          </div>
+          <div class="result-stat">
+            <span class="num red">${wrong}</span>
+            <span class="lbl">❌ Wrong</span>
+          </div>
+          <div class="result-stat">
+            <span class="num blue">${score}</span>
+            <span class="lbl">⭐ Points</span>
+          </div>
+        </div>
+
+        <div class="badge-box">
+          <div class="badge-icon">🎖️</div>
+          <h3>${badge}</h3>
+          <p>You scored ${pct}% — ${score} points out of ${questions.length * 10}</p>
+        </div>
+
+        <div class="result-btns">
+          <button class="retry-btn" onclick="retryQuiz()">🔄 Try Again</button>
+          <a href="destinations.html" class="explore-btn">🗺️ Explore Destinations</a>
+        </div>
+      `;
+
+      resultScreen.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function retryQuiz() {
+      currentQ = 0;
+      score = 0;
+      answered = 0;
+      correct = 0;
+      wrong = 0;
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'block';
+      showQuestion();
+    }
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packages - Pakistan Explorer Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">Pakistan<span>Explorer</span><small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <p class="nav-section-label">Main</p>
+      <a href="admin-dashboard.html"><span class="icon">📊</span> Dashboard</a>
+      <p class="nav-section-label">Manage</p>
+      <a href="admin-destinations.html"><span class="icon">📍</span> Destinations</a>
+      <a href="admin-packages.html" class="active"><span class="icon">🎒</span> Packages</a>
+      <a href="admin-bookings.html"><span class="icon">📅</span> Bookings</a>
+      <a href="admin-users.html"><span class="icon">👥</span> Users</a>
+      <a href="admin-reviews.html"><span class="icon">⭐</span> Reviews</a>
+    </nav>
+    <div class="sidebar-footer"><a href="../index.html">🌐 View Website</a></div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><h1>Packages</h1><p>Manage all tour packages</p></div>
+      <div class="topbar-right"><div class="admin-badge"><div class="admin-avatar">A</div>Admin</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="table-card">
+        <div class="table-head">
+          <div><h3>All Packages</h3><p id="pkg-count">Loading...</p></div>
+          <div class="table-actions">
+            <input class="search-input" type="text" placeholder="Search packages..." oninput="searchPkgs(this.value)">
+            <button class="btn-add" onclick="openAdd()">+ Add Package</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Package Name</th>
+              <th>Category</th>
+              <th>Duration</th>
+              <th>Price (PKR)</th>
+              <th>Max People</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="pkg-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD MODAL -->
+  <div class="modal-overlay" id="add-modal">
+    <div class="modal">
+      <h3>Add New Package</h3>
+      <p>Fill in all details for the new tour package.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Package Name *</label>
+          <input type="text" id="add-pkg-name" placeholder="e.g. Hunza Family Tour">
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="add-pkg-cat">
+            <option value="">-- Select --</option>
+            <option>Family</option>
+            <option>Honeymoon</option>
+            <option>Historical</option>
+            <option>Student</option>
+            <option>Adventure</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Duration *</label>
+          <input type="text" id="add-pkg-dur" placeholder="e.g. 5 Days / 4 Nights">
+        </div>
+        <div class="form-group">
+          <label>Price (PKR) *</label>
+          <input type="number" id="add-pkg-price" placeholder="e.g. 15000">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Max People *</label>
+          <input type="number" id="add-pkg-people" placeholder="e.g. 20">
+        </div>
+        <div class="form-group">
+          <label>Location *</label>
+          <input type="text" id="add-pkg-loc" placeholder="e.g. Hunza, GB">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('add-modal')">Cancel</button>
+        <button class="btn-save" onclick="addPackage()">Save Package</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+      <h3>Edit Package</h3>
+      <p>Update the package details below.</p>
+      <input type="hidden" id="edit-pkg-index">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Package Name *</label>
+          <input type="text" id="edit-pkg-name">
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="edit-pkg-cat">
+            <option>Family</option>
+            <option>Honeymoon</option>
+            <option>Historical</option>
+            <option>Student</option>
+            <option>Adventure</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Duration *</label>
+          <input type="text" id="edit-pkg-dur">
+        </div>
+        <div class="form-group">
+          <label>Price (PKR) *</label>
+          <input type="number" id="edit-pkg-price">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Max People *</label>
+          <input type="number" id="edit-pkg-people">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="edit-pkg-loc">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('edit-modal')">Cancel</button>
+        <button class="btn-save" onclick="updatePackage()">Update Package</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal delete-modal">
+      <div class="del-icon">🗑️</div>
+      <h3>Delete Package?</h3>
+      <p id="delete-msg"></p>
+      <input type="hidden" id="delete-index">
+      <div class="modal-footer" style="justify-content:center;">
+        <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel</button>
+        <button class="btn-delete" style="padding:10px 24px;font-size:14px;font-weight:700;border-radius:6px;cursor:pointer;font-family:var(--font);" onclick="deletePackage()">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
+  if (!currentUser || currentUser.role !== 'admin') {
+    window.location.href = '../login.html';
+  }
+    const defaultPackages = [
+      { name: 'Hunza Family Tour', cat: 'Family', dur: '5 Days / 4 Nights', price: 15000, people: 20, loc: 'Hunza, GB' },
+      { name: 'Naran Kaghan Family Tour', cat: 'Family', dur: '2 Days / 1 Night', price: 6000, people: 20, loc: 'Naran, KPK' },
+      { name: 'Neelum Valley Family Tour', cat: 'Family', dur: '4 Days / 3 Nights', price: 12000, people: 20, loc: 'AJK' },
+      { name: 'Murree Family Tour', cat: 'Family', dur: '2 Days / 1 Night', price: 5000, people: 20, loc: 'Murree' },
+      { name: 'Swat Family Tour', cat: 'Family', dur: '4 Days / 3 Nights', price: 11000, people: 20, loc: 'Swat, KPK' },
+      { name: 'Hunza Honeymoon Tour', cat: 'Honeymoon', dur: '5 Days / 4 Nights', price: 20000, people: 2, loc: 'Hunza, GB' },
+      { name: 'Skardu Honeymoon Tour', cat: 'Honeymoon', dur: '6 Days / 5 Nights', price: 25000, people: 2, loc: 'Skardu, GB' },
+      { name: 'Murree Couple Tour', cat: 'Honeymoon', dur: '2 Days / 1 Night', price: 8000, people: 2, loc: 'Murree' },
+      { name: 'Neelum Valley Honeymoon', cat: 'Honeymoon', dur: '4 Days / 3 Nights', price: 15000, people: 2, loc: 'AJK' },
+      { name: 'Nathia Gali Couple Tour', cat: 'Honeymoon', dur: '3 Days / 2 Nights', price: 9000, people: 2, loc: 'Nathia Gali' },
+      { name: 'Lahore Heritage Tour', cat: 'Historical', dur: '2 Days / 1 Night', price: 7000, people: 20, loc: 'Lahore' },
+      { name: 'Taxila Day Tour', cat: 'Historical', dur: '1 Day', price: 4000, people: 20, loc: 'Taxila' },
+      { name: 'Rohtas Fort Tour', cat: 'Historical', dur: '1 Day', price: 6000, people: 20, loc: 'Jhelum' },
+      { name: 'Mohenjo-daro Tour', cat: 'Historical', dur: '3 Days / 2 Nights', price: 12000, people: 15, loc: 'Larkana, Sindh' },
+      { name: 'Islamabad Heritage Tour', cat: 'Historical', dur: '1 Day', price: 3000, people: 20, loc: 'Islamabad' },
+      { name: 'Murree Student Trip', cat: 'Student', dur: '1 Day', price: 5000, people: 30, loc: 'Murree' },
+      { name: 'Nathia Gali Budget Trip', cat: 'Student', dur: '2 Days / 1 Night', price: 5000, people: 25, loc: 'Nathia Gali' },
+      { name: 'Islamabad City Tour', cat: 'Student', dur: '1 Day', price: 2000, people: 30, loc: 'Islamabad' },
+      { name: 'Khanpur Dam Trip', cat: 'Student', dur: '1 Day', price: 3000, people: 25, loc: 'Haripur' },
+      { name: 'Swat Budget Trip', cat: 'Student', dur: '3 Days / 2 Nights', price: 8000, people: 20, loc: 'Swat' },
+      { name: 'Fairy Meadows Trek', cat: 'Adventure', dur: '5 Days / 4 Nights', price: 18000, people: 8, loc: 'Diamer, GB' },
+      { name: 'Northern Grand Tour', cat: 'Adventure', dur: '6 Days / 5 Nights', price: 22000, people: 12, loc: 'GB' },
+      { name: 'Lakes Exploration Tour', cat: 'Adventure', dur: '4 Days / 3 Nights', price: 15000, people: 15, loc: 'Northern Pak' },
+      { name: 'Waterfall Adventure Tour', cat: 'Adventure', dur: '2 Days / 1 Night', price: 7000, people: 15, loc: 'KPK & GB' },
+      { name: 'Winter Snow Package', cat: 'Adventure', dur: '3 Days / 2 Nights', price: 10000, people: 20, loc: 'Malam Jabba' }
+    ];
+
+    const catColors = { Family: 'badge-info', Honeymoon: 'badge-danger', Historical: 'badge-warning', Student: 'badge-success', Adventure: 'badge-info' };
+
+    let packages = JSON.parse(localStorage.getItem('pe_packages')) || defaultPackages;
+
+    function save() { localStorage.setItem('pe_packages', JSON.stringify(packages)); }
+
+    function renderTable(data) {
+      document.getElementById('pkg-count').textContent = data.length + ' packages';
+      const tbody = document.getElementById('pkg-tbody');
+
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#888;">No packages found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map((p, i) => `
+        <tr>
+          <td>${packages.indexOf(p) + 1}</td>
+          <td><strong>${p.name}</strong><br><small style="color:#888;">${p.loc}</small></td>
+          <td><span class="badge ${catColors[p.cat] || 'badge-info'}">${p.cat}</span></td>
+          <td>${p.dur}</td>
+          <td>PKR ${p.price.toLocaleString()}</td>
+          <td>${p.people}</td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-edit" onclick="openEdit(${packages.indexOf(p)})">Edit</button>
+              <button class="btn-delete" onclick="openDelete(${packages.indexOf(p)})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function searchPkgs(query) {
+      const filtered = packages.filter(p =>
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.cat.toLowerCase().includes(query.toLowerCase()) ||
+        p.loc.toLowerCase().includes(query.toLowerCase())
+      );
+      renderTable(filtered);
+    }
+
+    function openAdd() {
+      ['add-pkg-name','add-pkg-dur','add-pkg-price','add-pkg-people','add-pkg-loc'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('add-pkg-cat').value = '';
+      openModal('add-modal');
+    }
+
+    function addPackage() {
+      const name = document.getElementById('add-pkg-name').value.trim();
+      const cat = document.getElementById('add-pkg-cat').value;
+      const dur = document.getElementById('add-pkg-dur').value.trim();
+      const price = parseInt(document.getElementById('add-pkg-price').value);
+      const people = parseInt(document.getElementById('add-pkg-people').value);
+      const loc = document.getElementById('add-pkg-loc').value.trim();
+
+      if (!name || !cat || !dur || !price || !people || !loc) {
+        showToast('Please fill in all fields!', 'danger');
+        return;
+      }
+
+      packages.push({ name, cat, dur, price, people, loc });
+      save();
+      renderTable(packages);
+      closeModal('add-modal');
+      showToast('Package "' + name + '" added successfully!', 'success');
+    }
+
+    function openEdit(index) {
+      const p = packages[index];
+      document.getElementById('edit-pkg-index').value = index;
+      document.getElementById('edit-pkg-name').value = p.name;
+      document.getElementById('edit-pkg-cat').value = p.cat;
+      document.getElementById('edit-pkg-dur').value = p.dur;
+      document.getElementById('edit-pkg-price').value = p.price;
+      document.getElementById('edit-pkg-people').value = p.people;
+      document.getElementById('edit-pkg-loc').value = p.loc;
+      openModal('edit-modal');
+    }
+
+    function updatePackage() {
+      const index = parseInt(document.getElementById('edit-pkg-index').value);
+      const name = document.getElementById('edit-pkg-name').value.trim();
+      const cat = document.getElementById('edit-pkg-cat').value;
+      const dur = document.getElementById('edit-pkg-dur').value.trim();
+      const price = parseInt(document.getElementById('edit-pkg-price').value);
+      const people = parseInt(document.getElementById('edit-pkg-people').value);
+      const loc = document.getElementById('edit-pkg-loc').value.trim();
+
+      if (!name || !cat || !dur || !price || !people) {
+        showToast('Please fill in all fields!', 'danger');
+        return;
+      }
+
+      packages[index] = { name, cat, dur, price, people, loc };
+      save();
+      renderTable(packages);
+      closeModal('edit-modal');
+      showToast('Package updated successfully!', 'success');
+    }
+
+    function openDelete(index) {
+      document.getElementById('delete-index').value = index;
+      document.getElementById('delete-msg').textContent = 'Delete "' + packages[index].name + '"? This cannot be undone.';
+      openModal('delete-modal');
+    }
+
+    function deletePackage() {
+      const index = parseInt(document.getElementById('delete-index').value);
+      const name = packages[index].name;
+      packages.splice(index, 1);
+      save();
+      renderTable(packages);
+      closeModal('delete-modal');
+      showToast('"' + name + '" deleted!', 'success');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast ' + type + ' show';
+      setTimeout(() => { toast.className = 'toast'; }, 3000);
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+
+    renderTable(packages);
+  </script>
+
+</body>
+</html>

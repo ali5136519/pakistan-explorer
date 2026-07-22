@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users - Pakistan Explorer Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">Pakistan<span>Explorer</span><small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <p class="nav-section-label">Main</p>
+      <a href="admin-dashboard.html"><span class="icon">📊</span> Dashboard</a>
+      <p class="nav-section-label">Manage</p>
+      <a href="admin-destinations.html"><span class="icon">📍</span> Destinations</a>
+      <a href="admin-packages.html"><span class="icon">🎒</span> Packages</a>
+      <a href="admin-bookings.html"><span class="icon">📅</span> Bookings</a>
+      <a href="admin-users.html" class="active"><span class="icon">👥</span> Users</a>
+      <a href="admin-reviews.html"><span class="icon">⭐</span> Reviews</a>
+    </nav>
+    <div class="sidebar-footer"><a href="../index.html">🌐 View Website</a></div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><h1>Users</h1><p>View and manage registered users</p></div>
+      <div class="topbar-right"><div class="admin-badge"><div class="admin-avatar">A</div>Admin</div></div>
+    </div>
+
+    <div class="page-content">
+
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr); margin-bottom:28px;">
+        <div class="stat-card">
+          <div class="stat-icon green">👤</div>
+          <div class="stat-info"><div class="number" id="count-active">0</div><div class="label">Active Users</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🚫</div>
+          <div class="stat-info"><div class="number" id="count-blocked">0</div><div class="label">Blocked</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">📊</div>
+          <div class="stat-info"><div class="number" id="count-total">0</div><div class="label">Total Users</div></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-head">
+          <div><h3>Registered Users</h3><p id="user-count">Loading...</p></div>
+          <div class="table-actions">
+            <input class="search-input" type="text" placeholder="Search users..." oninput="searchUsers(this.value)">
+            <select class="search-input" style="width:160px;" onchange="filterUsers(this.value)">
+              <option value="all">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>City</th>
+              <th>Joined</th>
+              <th>Bookings</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW USER MODAL -->
+  <div class="modal-overlay" id="view-modal">
+    <div class="modal">
+      <h3>User Profile</h3>
+      <p>Full details of this registered user.</p>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input id="vu-name" readonly style="background:#f8f9fa;width:100%;padding:11px 14px;border:1.5px solid #e2dac8;border-radius:6px;font-family:var(--font);"></div>
+        <div class="form-group"><label>Email</label><input id="vu-email" readonly style="background:#f8f9fa;width:100%;padding:11px 14px;border:1.5px solid #e2dac8;border-radius:6px;font-family:var(--font);"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>City</label><input id="vu-city" readonly style="background:#f8f9fa;width:100%;padding:11px 14px;border:1.5px solid #e2dac8;border-radius:6px;font-family:var(--font);"></div>
+        <div class="form-group"><label>Joined</label><input id="vu-joined" readonly style="background:#f8f9fa;width:100%;padding:11px 14px;border:1.5px solid #e2dac8;border-radius:6px;font-family:var(--font);"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Total Bookings</label><input id="vu-bookings" readonly style="background:#f8f9fa;width:100%;padding:11px 14px;border:1.5px solid #e2dac8;border-radius:6px;font-family:var(--font);"></div>
+        <div class="form-group"><label>Status</label><input id="vu-status" readonly style="background:#f8f9fa;width:100%;padding:11px 14px;border:1.5px solid #e2dac8;border-radius:6px;font-family:var(--font);"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('view-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
+  if (!currentUser || currentUser.role !== 'admin') {
+    window.location.href = '../login.html';
+  }
+    const defaultUsers = [
+      { name: 'Ahmed Raza', email: 'ahmed@example.com', city: 'Lahore', joined: 'Jan 2026', bookings: 3, status: 'Active' },
+      { name: 'Sara Malik', email: 'sara@example.com', city: 'Karachi', joined: 'Feb 2026', bookings: 1, status: 'Active' },
+      { name: 'Usman Tariq', email: 'usman@example.com', city: 'Islamabad', joined: 'Feb 2026', bookings: 2, status: 'Active' },
+      { name: 'Fatima Zaheer', email: 'fatima@example.com', city: 'Rawalpindi', joined: 'Mar 2026', bookings: 1, status: 'Blocked' },
+      { name: 'Zain ul Abideen', email: 'zain@example.com', city: 'Peshawar', joined: 'Mar 2026', bookings: 4, status: 'Active' },
+      { name: 'Hira Baig', email: 'hira@example.com', city: 'Lahore', joined: 'Apr 2026', bookings: 2, status: 'Active' },
+      { name: 'Hassan Ali', email: 'hassan@example.com', city: 'Multan', joined: 'May 2026', bookings: 1, status: 'Active' },
+      { name: 'Amna Sheikh', email: 'amna@example.com', city: 'Islamabad', joined: 'Jun 2026', bookings: 3, status: 'Active' }
+    ];
+
+    let users = JSON.parse(localStorage.getItem('pe_users')) || defaultUsers;
+    let currentFilter = 'all';
+
+    function save() { localStorage.setItem('pe_users', JSON.stringify(users)); }
+
+    function updateStats() {
+      document.getElementById('count-active').textContent = users.filter(u => u.status === 'Active').length;
+      document.getElementById('count-blocked').textContent = users.filter(u => u.status === 'Blocked').length;
+      document.getElementById('count-total').textContent = users.length;
+      document.getElementById('user-count').textContent = users.length + ' registered users';
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('users-tbody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#888;">No users found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(u => {
+        const realIndex = users.indexOf(u);
+        const isBlocked = u.status === 'Blocked';
+        return `
+          <tr>
+            <td>${realIndex + 1}</td>
+            <td><strong>${u.name}</strong></td>
+            <td>${u.email}</td>
+            <td>${u.city}</td>
+            <td>${u.joined}</td>
+            <td>${u.bookings}</td>
+            <td><span class="badge ${isBlocked ? 'badge-danger' : 'badge-success'}">${u.status}</span></td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-view" onclick="viewUser(${realIndex})">View</button>
+                ${isBlocked
+                  ? `<button class="btn-edit" onclick="toggleBlock(${realIndex})">Unblock</button>`
+                  : `<button class="btn-delete" onclick="toggleBlock(${realIndex})">Block</button>`
+                }
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function applyFilter() {
+      let filtered = currentFilter === 'all' ? users : users.filter(u => u.status === currentFilter);
+      renderTable(filtered);
+    }
+
+    function filterUsers(status) { currentFilter = status; applyFilter(); }
+
+    function searchUsers(query) {
+      let data = currentFilter === 'all' ? users : users.filter(u => u.status === currentFilter);
+      renderTable(data.filter(u =>
+        u.name.toLowerCase().includes(query.toLowerCase()) ||
+        u.email.toLowerCase().includes(query.toLowerCase()) ||
+        u.city.toLowerCase().includes(query.toLowerCase())
+      ));
+    }
+
+    function viewUser(index) {
+      const u = users[index];
+      document.getElementById('vu-name').value = u.name;
+      document.getElementById('vu-email').value = u.email;
+      document.getElementById('vu-city').value = u.city;
+      document.getElementById('vu-joined').value = u.joined;
+      document.getElementById('vu-bookings').value = u.bookings + ' booking(s)';
+      document.getElementById('vu-status').value = u.status;
+      openModal('view-modal');
+    }
+
+    function toggleBlock(index) {
+      const u = users[index];
+      const wasBlocked = u.status === 'Blocked';
+      users[index].status = wasBlocked ? 'Active' : 'Blocked';
+      save();
+      updateStats();
+      applyFilter();
+      showToast(u.name + ' has been ' + (wasBlocked ? 'unblocked!' : 'blocked!'), wasBlocked ? 'success' : 'danger');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast ' + type + ' show';
+      setTimeout(() => { toast.className = 'toast'; }, 3000);
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
+      });
+    });
+
+    updateStats();
+    applyFilter();
+  </script>
+
+</body>
+</html>

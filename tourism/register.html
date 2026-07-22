@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Pakistan Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background:
+        linear-gradient(rgba(22,48,42,0.82), rgba(22,48,42,0.82)),
+        url('toursim pics/fairy medeows.jpg') center/cover no-repeat fixed;
+    }
+
+    .auth-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(252, 250, 244, 0.97);
+      border-radius: var(--radius-lg);
+      padding: 44px 40px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .auth-header .logo-text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--pine-900);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .auth-header .logo-text span { color: var(--marigold-500); }
+    .auth-header h2 { font-size: 26px; color: var(--pine-900); margin-bottom: 6px; }
+    .auth-header p { color: var(--ink-600); font-size: 14px; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-900);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--line-200);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: var(--font-body);
+      color: var(--ink-900);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--pine-500);
+      box-shadow: 0 0 0 3px rgba(47, 97, 82, 0.12);
+    }
+
+    .form-group input.error { border-color: #e53e3e; }
+
+    .error-msg {
+      font-size: 12px;
+      color: #e53e3e;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .input-wrap { position: relative; }
+
+    .toggle-pw {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--ink-600);
+    }
+
+    .strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      margin-top: 8px;
+      background: var(--line-200);
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+
+    .strength-text {
+      font-size: 12px;
+      color: var(--ink-600);
+      margin-top: 4px;
+    }
+    .terms-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--ink-600);
+    }
+    .terms-wrap input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--pine-700);
+      flex-shrink: 0;
+    }
+
+    .terms-wrap a {
+      color: var(--pine-700);
+      font-weight: 600;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--pine-700);
+      color: var(--parchment-50);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      font-family: var(--font-body);
+      margin-bottom: 20px;
+    }
+
+    .auth-btn:hover {
+      background: var(--pine-500);
+      transform: translateY(-2px);
+    }
+
+    .auth-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--ink-600);
+    }
+
+    .auth-footer a {
+      color: var(--pine-700);
+      font-weight: 700;
+    }
+
+    @media (max-width: 520px) {
+      .auth-card { padding: 32px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="packages.html">Packages</a></li>
+          <li><a href="trip-planner.html">Trip Planner</a></li>
+          <li><a href="travel-advisory.html">Advisory</a></li>
+          <li><a href="quiz.html" class="active">Quiz</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="review.html">Reviews</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="register.html" class="register-link">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- REGISTER FORM -->
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <span class="logo-text">Pakistan<span>Explorer</span></span>
+        <h2>Create Your Account</h2>
+        <p>Join thousands of travelers exploring Pakistan</p>
+      </div>
+
+      <!-- NAME ROW: do fields ek line mein -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="fname" placeholder="Ali">
+          <span class="error-msg" id="err-fname">Required</span>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lname" placeholder="Ahmed">
+          <span class="error-msg" id="err-lname">Required</span>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="reg-email" placeholder="ali@example.com">
+        <span class="error-msg" id="err-reg-email">Please enter a valid email</span>
+      </div>
+
+      <!-- PHONE -->
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="reg-phone" placeholder="03001234567">
+        <span class="error-msg" id="err-reg-phone">Please enter valid Pakistani number</span>
+      </div>
+
+      <!-- CITY -->
+      <div class="form-group">
+        <label>Your City</label>
+        <select id="reg-city">
+          <option value="">-- Select City --</option>
+          <option>Islamabad</option>
+          <option>Rawalpindi</option>
+          <option>Lahore</option>
+          <option>Karachi</option>
+          <option>Peshawar</option>
+          <option>Quetta</option>
+          <option>Multan</option>
+          <option>Faisalabad</option>
+          <option>Other</option>
+        </select>
+        <span class="error-msg" id="err-reg-city">Please select your city</span>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-password"
+            placeholder="Minimum 8 characters"
+            oninput="checkStrength(this.value)">
+          
+          <button class="toggle-pw" onclick="togglePassword('reg-password', this)">👁️</button>
+        </div>
+        <!-- Strength bar — JavaScript se fill hogi -->
+        <div class="strength-bar">
+          <div class="strength-fill" id="strength-fill"></div>
+        </div>
+        <p class="strength-text" id="strength-text"></p>
+        <span class="error-msg" id="err-reg-pw">Password must be at least 8 characters</span>
+      </div>
+
+      <!-- CONFIRM PASSWORD -->
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-confirm" placeholder="Re-enter password">
+          <button class="toggle-pw" onclick="togglePassword('reg-confirm', this)">👁️</button>
+        </div>
+        <span class="error-msg" id="err-reg-confirm">Passwords do not match</span>
+      </div>
+
+      <!-- TERMS CHECKBOX -->
+      <div class="terms-wrap">
+        <input type="checkbox" id="terms">
+        
+        <label for="terms" style="text-transform:none; font-weight:400; letter-spacing:0; margin:0;">
+          I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </label>
+      </div>
+      <span class="error-msg" id="err-terms" style="margin-top:-10px; margin-bottom:14px; display:none;">Please accept the terms</span>
+
+      <!-- SUBMIT -->
+      <button class="auth-btn" onclick="registerSubmit()">Create Account →</button>
+
+      <!-- LOGIN LINK -->
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Log In</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Pakistan Explorer</h4>
+          <p>A platform for discovering and booking domestic tourism experiences across Pakistan.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="packages.html">Packages</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="review.html">Reviews</a></li>
+          </ul>
+        </div>
+        <div>
+
+  <h4>Contact</h4>
+
+  <p>Islamabad, Pakistan</p>
+
+  <a href="mailto:ali5136519@gmail.com"
+
+     style="color:var(--sage-300);font-size:14px;">
+
+ali5136519@gmail.com
+
+  </a>
+
+  <br>
+
+  <a href="https://wa.me/923239399316"
+
+     target="_blank"
+
+     style="color:#25D366;font-size:14px;font-weight:600;margin-top:8px;display:inline-block;">
+
+    💬 WhatsApp Us
+
+  </a>
+
+</div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Pakistan Explorer — Islamabad.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  function togglePassword(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = '🙈';
+    } else {
+      input.type = 'password';
+      btn.textContent = '👁️';
+    }
+  }
+
+  function checkStrength(password) {
+    const fill = document.getElementById('strength-fill');
+    const text = document.getElementById('strength-text');
+    if (password.length === 0) {
+      fill.style.width = '0%';
+      text.textContent = '';
+    } else if (password.length < 4) {
+      fill.style.width = '25%';
+      fill.style.background = '#e53e3e';
+      text.textContent = 'Weak';
+      text.style.color = '#e53e3e';
+    } else if (password.length < 8) {
+      fill.style.width = '60%';
+      fill.style.background = '#d69e2e';
+      text.textContent = 'Medium';
+      text.style.color = '#d69e2e';
+    } else {
+      fill.style.width = '100%';
+      fill.style.background = '#38a169';
+      text.textContent = 'Strong ✓';
+      text.style.color = '#38a169';
+    }
+  }
+
+  async function registerSubmit() {
+    let isValid = true;
+
+    function check(fieldId, errorId, condition) {
+      const field = document.getElementById(fieldId);
+      const err = document.getElementById(errorId);
+      if (condition) {
+        if (field) field.classList.add('error');
+        err.style.display = 'block';
+        isValid = false;
+      } else {
+        if (field) field.classList.remove('error');
+        err.style.display = 'none';
+      }
+    }
+
+    check('fname', 'err-fname',
+      document.getElementById('fname').value.trim() === '');
+    check('lname', 'err-lname',
+      document.getElementById('lname').value.trim() === '');
+    check('reg-email', 'err-reg-email',
+      !document.getElementById('reg-email').value.includes('@'));
+    check('reg-phone', 'err-reg-phone',
+      document.getElementById('reg-phone').value.trim().length < 11);
+    check('reg-city', 'err-reg-city',
+      document.getElementById('reg-city').value === '');
+    check('reg-password', 'err-reg-pw',
+      document.getElementById('reg-password').value.length < 8);
+
+    const pw = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm').value;
+    check('reg-confirm', 'err-reg-confirm', pw !== confirm);
+
+    const termsErr = document.getElementById('err-terms');
+    if (!document.getElementById('terms').checked) {
+      termsErr.style.display = 'block';
+      isValid = false;
+    } else {
+      termsErr.style.display = 'none';
+    }
+
+    if (isValid) {
+
+      const btn = document.querySelector('.auth-btn');
+      btn.textContent = 'Creating Account...';
+      btn.disabled = true;
+
+      try {
+
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            firstName: document.getElementById('fname').value.trim(),
+            lastName: document.getElementById('lname').value.trim(),
+            email: document.getElementById('reg-email').value.trim(),
+            password: document.getElementById('reg-password').value,
+            phone: document.getElementById('reg-phone').value.trim(),
+            city: document.getElementById('reg-city').value
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('Account created successfully! Please login to continue.');
+
+window.location.href = 'login.html';
+
+        } else {
+          alert(data.message || 'Registration failed. Please try again.');
+          btn.textContent = 'Create Account →';
+          btn.disabled = false;
+        }
+
+      } catch (error) {
+        alert('Cannot connect to server. Please try again.');
+        btn.textContent = 'Create Account →';
+        btn.disabled = false;
+      }
+    }
+  }
+
+</script>
+    
+  </script>
+
+</body>
+</html>

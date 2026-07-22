@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Advisory - Pakistan Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      background:
+        linear-gradient(rgba(22,48,42,0.75), rgba(22,48,42,0.88)),
+        url('toursim pics/fairy medeows.jpg') center/cover no-repeat;
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--parchment-50);
+    }
+    .page-hero h1 { color: var(--parchment-50); font-size: clamp(32px, 5vw, 52px); margin-bottom: 12px; }
+    .page-hero p { font-size: 17px; color: var(--sage-300); max-width: 560px; margin: 0 auto; }
+
+    .advisory-section { padding: 64px 0 80px; }
+
+    .destination-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: 1.5px solid var(--line-200);
+      background: var(--parchment-50);
+      color: var(--ink-600);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover { border-color: var(--pine-700); color: var(--pine-700); }
+    .tab-btn.active { background: var(--pine-700); color: white; border-color: var(--pine-700); }
+
+    .advisory-content { display: none; }
+    .advisory-content.active { display: block; }
+
+    .advisory-hero-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      margin-bottom: 32px;
+    }
+
+    .advisory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .advisory-card {
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+    }
+
+    .advisory-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-200);
+    }
+
+    .advisory-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background: var(--pine-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .advisory-card-header h3 { font-size: 17px; color: var(--pine-900); }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      color: var(--ink-600);
+      line-height: 1.6;
+    }
+
+    .info-item:last-child { border-bottom: none; }
+
+    .info-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--marigold-500);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .status-bar {
+      background: var(--parchment-50);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--line-200);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.green { background: #38a169; }
+    .status-dot.yellow { background: #d69e2e; }
+    .status-dot.red { background: #e53e3e; }
+
+    .status-label { font-size: 13px; color: var(--ink-600); font-weight: 400; margin-left: 2px; }
+
+    .alert-box {
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .alert-box.warning { background: #fffbeb; border: 1px solid #f6c90e; color: #7d6608; }
+    .alert-box.info { background: #ebf8ff; border: 1px solid #63b3ed; color: #1a5276; }
+    .alert-box.success { background: #f0fff4; border: 1px solid #68d391; color: #1a4731; }
+
+    @media (max-width: 700px) {
+      .advisory-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="packages.html">Packages</a></li>
+          <li><a href="trip-planner.html">Trip Planner</a></li>
+          <li><a href="travel-advisory.html" class="active">Advisory</a></li>
+          <li><a href="quiz.html" class="active">Quiz</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="review.html">Reviews</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="register.html" class="register-link">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <h1>Travel Advisory</h1>
+    <p>Permit requirements, road conditions, best travel time, and safety tips — all in one place before you go.</p>
+  </section>
+
+  <section class="advisory-section">
+    <div class="container">
+
+      <div class="destination-tabs">
+        <button class="tab-btn active" onclick="showTab('hunza', this)">📍 Hunza Valley</button>
+        <button class="tab-btn" onclick="showTab('skardu', this)">📍 Skardu</button>
+        <button class="tab-btn" onclick="showTab('naran', this)">📍 Naran Kaghan</button>
+        <button class="tab-btn" onclick="showTab('fairy', this)">📍 Fairy Meadows</button>
+        <button class="tab-btn" onclick="showTab('neelum', this)">📍 Neelum Valley</button>
+        <button class="tab-btn" onclick="showTab('swat', this)">📍 Swat Valley</button>
+      </div>
+
+      <!-- HUNZA -->
+      <div class="advisory-content active" id="tab-hunza">
+        <img src="toursim pics/hunza valley.jpg" alt="Hunza Valley" class="advisory-hero-img">
+
+        <div class="alert-box success">
+          <span>✅</span>
+          <span><strong>Currently Open:</strong> Hunza Valley is accessible via KKH (Karakoram Highway). Road conditions are good. No special permit required for Pakistani nationals.</span>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item"><div class="status-dot green"></div> Road Open <span class="status-label">(KKH operative)</span></div>
+          <div class="status-item"><div class="status-dot green"></div> No Permit Required <span class="status-label">(Pakistani nationals)</span></div>
+          <div class="status-item"><div class="status-dot yellow"></div> Foreign Nationals <span class="status-label">(NOC required)</span></div>
+        </div>
+
+        <div class="advisory-grid">
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">📋</div>
+              <h3>Permit Requirements</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Pakistani nationals — No permit needed for Hunza main valley</div>
+            <div class="info-item"><div class="info-dot"></div>For Khunjerab Pass — CNIC required at checkpost</div>
+            <div class="info-item"><div class="info-dot"></div>Foreign nationals — NOC from Ministry of Interior required</div>
+            <div class="info-item"><div class="info-dot"></div>Permit obtained from DC office Gilgit or online via NADRA portal</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🗓</div>
+              <h3>Best Time to Visit</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div><strong>April–June:</strong> Cherry blossom season — most beautiful, mild weather</div>
+            <div class="info-item"><div class="info-dot"></div><strong>July–September:</strong> Peak tourist season — all roads open, warm days</div>
+            <div class="info-item"><div class="info-dot"></div><strong>October–November:</strong> Autumn colors — fewer tourists, cooler</div>
+            <div class="info-item"><div class="info-dot"></div><strong>December–March:</strong> Heavy snowfall — some roads may close</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🚗</div>
+              <h3>Road & Travel Info</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Distance from Islamabad: ~600 km via KKH</div>
+            <div class="info-item"><div class="info-dot"></div>Travel time: 14–16 hours by road (coaster/jeep)</div>
+            <div class="info-item"><div class="info-dot"></div>Flights available: Islamabad → Gilgit (45 min, weather dependent)</div>
+            <div class="info-item"><div class="info-dot"></div>Road condition: KKH paved but narrow — drive carefully at night</div>
+            <div class="info-item"><div class="info-dot"></div>Fuel stations: Available in Gilgit — fill up before heading to Hunza</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">⚠️</div>
+              <h3>Safety Tips</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Carry CNIC — checkposts on KKH will verify identity</div>
+            <div class="info-item"><div class="info-dot"></div>Mobile signal: Telenor and Jazz available in Hunza town</div>
+            <div class="info-item"><div class="info-dot"></div>Altitude sickness possible — rest on first day, drink water</div>
+            <div class="info-item"><div class="info-dot"></div>Carry cash — limited ATMs available in Karimabad</div>
+            <div class="info-item"><div class="info-dot"></div>Emergency contact: Gilgit Rescue: 1122</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKARDU -->
+      <div class="advisory-content" id="tab-skardu">
+        <img src="toursim pics/skardu.jpg" alt="Skardu" class="advisory-hero-img">
+
+        <div class="alert-box warning">
+          <span>⚠️</span>
+          <span><strong>Seasonal Advisory:</strong> Skardu flights are weather-dependent and frequently cancelled. Book road transport as backup. High altitude — acclimatization recommended.</span>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item"><div class="status-dot green"></div> Road Open <span class="status-label">(via Gilgit)</span></div>
+          <div class="status-item"><div class="status-dot yellow"></div> Flights Uncertain <span class="status-label">(weather dependent)</span></div>
+          <div class="status-item"><div class="status-dot green"></div> No Permit <span class="status-label">(Pakistani nationals)</span></div>
+        </div>
+
+        <div class="advisory-grid">
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">📋</div>
+              <h3>Permit Requirements</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Pakistani nationals — No permit for Skardu city and Shangrila</div>
+            <div class="info-item"><div class="info-dot"></div>Deosai National Park — Entry fee + vehicle registration required</div>
+            <div class="info-item"><div class="info-dot"></div>K2 base camp — Separate permit from Alpine Club of Pakistan</div>
+            <div class="info-item"><div class="info-dot"></div>Foreign nationals — NOC mandatory for entire GB region</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🗓</div>
+              <h3>Best Time to Visit</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div><strong>May–September:</strong> Best months — all roads including Deosai open</div>
+            <div class="info-item"><div class="info-dot"></div><strong>June–July:</strong> Deosai plains fully green — wildflowers blooming</div>
+            <div class="info-item"><div class="info-dot"></div><strong>October:</strong> Cold but beautiful — less crowded</div>
+            <div class="info-item"><div class="info-dot"></div><strong>Nov–April:</strong> Deosai closed due to snow — avoid unless experienced</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🚗</div>
+              <h3>Road & Travel Info</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Distance from Islamabad: ~700 km via KKH + Gilgit</div>
+            <div class="info-item"><div class="info-dot"></div>By road: 20–22 hours — overnight journey recommended</div>
+            <div class="info-item"><div class="info-dot"></div>By flight: 1 hour from Islamabad — book early, frequent cancellations</div>
+            <div class="info-item"><div class="info-dot"></div>4x4 jeep required for Deosai — cannot go in normal car</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">⚠️</div>
+              <h3>Safety Tips</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Altitude: Skardu is at 2,228m — give yourself 1 day to adjust</div>
+            <div class="info-item"><div class="info-dot"></div>Deosai is at 4,114m — serious altitude sickness risk, go slow</div>
+            <div class="info-item"><div class="info-dot"></div>Bears in Deosai — do not leave camp unattended at night</div>
+            <div class="info-item"><div class="info-dot"></div>Carry warm clothes even in summer — nights are freezing</div>
+            <div class="info-item"><div class="info-dot"></div>Emergency: Skardu CMH: 05811-920333</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NARAN KAGHAN -->
+      <div class="advisory-content" id="tab-naran">
+        <img src="toursim pics/naran kaghan.jpg" alt="Naran Kaghan" class="advisory-hero-img">
+
+        <div class="alert-box info">
+          <span>ℹ️</span>
+          <span><strong>Peak Season Notice:</strong> July–August is extremely busy. Book hotels in advance. Saif-ul-Malook can only be reached by jeep or horse — no private cars allowed beyond Naran.</span>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item"><div class="status-dot green"></div> Road Open <span class="status-label">(Mansehra to Naran)</span></div>
+          <div class="status-item"><div class="status-dot green"></div> No Permit Required</div>
+          <div class="status-item"><div class="status-dot yellow"></div> Jeep Only <span class="status-label">(beyond Naran)</span></div>
+        </div>
+
+        <div class="advisory-grid">
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">📋</div>
+              <h3>Permit Requirements</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>No permit required for Pakistani nationals</div>
+            <div class="info-item"><div class="info-dot"></div>Saif-ul-Malook — small entry fee at lakeside</div>
+            <div class="info-item"><div class="info-dot"></div>Babusar Top — checkpost, CNIC verification</div>
+            <div class="info-item"><div class="info-dot"></div>Lulusar Lake — no permit, free access</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🗓</div>
+              <h3>Best Time to Visit</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div><strong>June–August:</strong> Road fully open — peak tourist season</div>
+            <div class="info-item"><div class="info-dot"></div><strong>September:</strong> Quieter, cooler — great for photography</div>
+            <div class="info-item"><div class="info-dot"></div><strong>May:</strong> Snow still on peaks — dramatic views, some roads closed</div>
+            <div class="info-item"><div class="info-dot"></div><strong>Oct–May:</strong> Road closed beyond Balakot — Naran inaccessible</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🚗</div>
+              <h3>Road & Travel Info</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Distance from Islamabad: ~250 km via Mansehra</div>
+            <div class="info-item"><div class="info-dot"></div>Travel time: 6–7 hours by car or coaster</div>
+            <div class="info-item"><div class="info-dot"></div>Jeep mandatory for Saif-ul-Malook, Lulusar, Babusar</div>
+            <div class="info-item"><div class="info-dot"></div>Jeep rates: ~PKR 2,500–4,000 from Naran jeep stand</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">⚠️</div>
+              <h3>Safety Tips</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Flash floods possible July–August — don't camp near rivers</div>
+            <div class="info-item"><div class="info-dot"></div>Saif-ul-Malook: go early morning — afternoon clouds block views</div>
+            <div class="info-item"><div class="info-dot"></div>Landslide prone area — check NDMA alerts before travel</div>
+            <div class="info-item"><div class="info-dot"></div>Mobile signal: Jazz/Telenor in Naran town, none beyond</div>
+            <div class="info-item"><div class="info-dot"></div>Emergency: Rescue 1122 Mansehra</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAIRY MEADOWS -->
+      <div class="advisory-content" id="tab-fairy">
+        <img src="toursim pics/fairy medeows.jpg" alt="Fairy Meadows" class="advisory-hero-img">
+
+        <div class="alert-box warning">
+          <span>⚠️</span>
+          <span><strong>Difficult Access:</strong> Road to Raikot Bridge is extremely dangerous — world's one of most dangerous roads. Only experienced jeep drivers allowed. Not recommended for families with children.</span>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item"><div class="status-dot yellow"></div> Difficult Road <span class="status-label">(jeep only)</span></div>
+          <div class="status-item"><div class="status-dot green"></div> No Permit Required</div>
+          <div class="status-item"><div class="status-dot green"></div> Open May–Oct</div>
+        </div>
+
+        <div class="advisory-grid">
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">📋</div>
+              <h3>Permit Requirements</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>No permit required for Pakistani nationals</div>
+            <div class="info-item"><div class="info-dot"></div>Register at Raikot Bridge checkpost — CNIC required</div>
+            <div class="info-item"><div class="info-dot"></div>Foreign nationals — NOC from GB government required</div>
+            <div class="info-item"><div class="info-dot"></div>Camping equipment must be declared at checkpost</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🗓</div>
+              <h3>Best Time to Visit</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div><strong>June–August:</strong> Best time — meadows lush green, Nanga Parbat clear</div>
+            <div class="info-item"><div class="info-dot"></div><strong>May:</strong> Snow still present — dramatic but cold camping</div>
+            <div class="info-item"><div class="info-dot"></div><strong>September:</strong> Fewer tourists, still accessible</div>
+            <div class="info-item"><div class="info-dot"></div><strong>Oct–May:</strong> Closed — heavy snow makes trail impossible</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🚗</div>
+              <h3>Road & Travel Info</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>From Islamabad: Drive to Raikot Bridge (~8 hrs) via KKH</div>
+            <div class="info-item"><div class="info-dot"></div>Raikot Bridge to Tato village: Jeep ride (~45 min, very steep)</div>
+            <div class="info-item"><div class="info-dot"></div>Tato to Fairy Meadows: 3–4 hour hike on foot</div>
+            <div class="info-item"><div class="info-dot"></div>No cars beyond Raikot Bridge — jeep only, Rs 2000–3000</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">⚠️</div>
+              <h3>Safety Tips</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Jeep road is one of world's most dangerous — don't look down</div>
+            <div class="info-item"><div class="info-dot"></div>Hire only local experienced jeep drivers from Raikot</div>
+            <div class="info-item"><div class="info-dot"></div>No mobile signal — inform family before going</div>
+            <div class="info-item"><div class="info-dot"></div>Carry all food, water, medicine — nothing available at meadows</div>
+            <div class="info-item"><div class="info-dot"></div>Temperature drops to 0°C at night even in summer</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEELUM VALLEY -->
+      <div class="advisory-content" id="tab-neelum">
+        <img src="toursim pics/neelum valley.jpg" alt="Neelum Valley" class="advisory-hero-img">
+
+        <div class="alert-box success">
+          <span>✅</span>
+          <span><strong>Good Conditions:</strong> Neelum Valley road is open and accessible. No special permits required for Pakistani nationals. Arang Kel cable car is operational.</span>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item"><div class="status-dot green"></div> Road Open</div>
+          <div class="status-item"><div class="status-dot green"></div> No Permit Required</div>
+          <div class="status-item"><div class="status-dot green"></div> Cable Car Operational</div>
+        </div>
+
+        <div class="advisory-grid">
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">📋</div>
+              <h3>Permit Requirements</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>No permit for Pakistani nationals in main Neelum Valley</div>
+            <div class="info-item"><div class="info-dot"></div>CNIC required at AJK entry checkpost near Muzaffarabad</div>
+            <div class="info-item"><div class="info-dot"></div>Kel and Arang Kel — small conservation fee applies</div>
+            <div class="info-item"><div class="info-dot"></div>Foreign nationals — Special permit from AJK government required</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🗓</div>
+              <h3>Best Time to Visit</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div><strong>May–September:</strong> Best — road fully open, greenery at peak</div>
+            <div class="info-item"><div class="info-dot"></div><strong>March–April:</strong> Spring blossoms — less crowded</div>
+            <div class="info-item"><div class="info-dot"></div><strong>October:</strong> Autumn colors — stunning photography</div>
+            <div class="info-item"><div class="info-dot"></div><strong>Dec–Feb:</strong> Some sections snow-blocked — road closures possible</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🚗</div>
+              <h3>Road & Travel Info</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Distance from Islamabad: ~160 km via Muzaffarabad</div>
+            <div class="info-item"><div class="info-dot"></div>Travel time: 4–5 hours to Muzaffarabad, 2 more hours to Keran</div>
+            <div class="info-item"><div class="info-dot"></div>Arang Kel: Boat across river + cable car (or 3 hour hike)</div>
+            <div class="info-item"><div class="info-dot"></div>Road is narrow and winding — drive carefully, avoid night driving</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">⚠️</div>
+              <h3>Safety Tips</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Sensitive border area — stay on main tourist routes</div>
+            <div class="info-item"><div class="info-dot"></div>Mobile signal: good in Muzaffarabad, weak beyond Keran</div>
+            <div class="info-item"><div class="info-dot"></div>River crossings — only use authorized boats</div>
+            <div class="info-item"><div class="info-dot"></div>Carry cash — no ATMs beyond Muzaffarabad</div>
+            <div class="info-item"><div class="info-dot"></div>Emergency: AJK Rescue: 1122</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SWAT -->
+      <div class="advisory-content" id="tab-swat">
+        <img src="toursim pics/swat .jpg" alt="Swat Valley" class="advisory-hero-img">
+
+        <div class="alert-box success">
+          <span>✅</span>
+          <span><strong>Fully Safe & Open:</strong> Swat Valley is completely safe for tourists. No permits required. Malam Jabba ski resort and chairlift are operational. Recommended for families.</span>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item"><div class="status-dot green"></div> Road Open</div>
+          <div class="status-item"><div class="status-dot green"></div> No Permit Required</div>
+          <div class="status-item"><div class="status-dot green"></div> Family Friendly</div>
+        </div>
+
+        <div class="advisory-grid">
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">📋</div>
+              <h3>Permit Requirements</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>No permit required for Pakistani nationals</div>
+            <div class="info-item"><div class="info-dot"></div>Malam Jabba ski resort — ticket required at gate</div>
+            <div class="info-item"><div class="info-dot"></div>Chairlift — separate ticket, approx PKR 500/person</div>
+            <div class="info-item"><div class="info-dot"></div>Foreign nationals — register at hotel, no special permit needed</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🗓</div>
+              <h3>Best Time to Visit</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div><strong>April–June:</strong> Lush green, cool weather — best for sightseeing</div>
+            <div class="info-item"><div class="info-dot"></div><strong>December–February:</strong> Snow season — skiing at Malam Jabba</div>
+            <div class="info-item"><div class="info-dot"></div><strong>July–September:</strong> Busy season — book hotels in advance</div>
+            <div class="info-item"><div class="info-dot"></div><strong>October:</strong> Autumn — colorful forests, pleasant temperature</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">🚗</div>
+              <h3>Road & Travel Info</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Distance from Islamabad: ~250 km via Motorway + Swat Expressway</div>
+            <div class="info-item"><div class="info-dot"></div>Travel time: 4–5 hours by car or coaster</div>
+            <div class="info-item"><div class="info-dot"></div>Swat Expressway: excellent condition — fast and safe drive</div>
+            <div class="info-item"><div class="info-dot"></div>Malam Jabba: 40 km from Saidu Sharif — winding mountain road</div>
+          </div>
+
+          <div class="advisory-card">
+            <div class="advisory-card-header">
+              <div class="advisory-icon">⚠️</div>
+              <h3>Safety Tips</h3>
+            </div>
+            <div class="info-item"><div class="info-dot"></div>Swat is completely safe — active tourism police presence</div>
+            <div class="info-item"><div class="info-dot"></div>Mobile signal: excellent throughout Swat valley</div>
+            <div class="info-item"><div class="info-dot"></div>ATMs available in Mingora — carry cash for mountain areas</div>
+            <div class="info-item"><div class="info-dot"></div>Buddhist ruins at Butkara — respectful behavior required</div>
+            <div class="info-item"><div class="info-dot"></div>Emergency: Rescue 1122 Swat</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div><h4>Pakistan Explorer</h4><p>A platform for discovering and booking domestic tourism experiences across Pakistan.</p></div>
+        <div><h4>Explore</h4><ul><li><a href="destinations.html">Destinations</a></li><li><a href="packages.html">Packages</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+        <div><h4>Company</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="review.html">Reviews</a></li></ul></div>
+        <div>
+
+  <h4>Contact</h4>
+
+  <p>Islamabad, Pakistan</p>
+
+  <a href="mailto:ali5136519@gmail.com"
+
+     style="color:var(--sage-300);font-size:14px;">
+
+ali5136519@gmail.com
+
+  </a>
+
+  <br>
+
+  <a href="https://wa.me/923239399316"
+
+     target="_blank"
+
+     style="color:#25D366;font-size:14px;font-weight:600;margin-top:8px;display:inline-block;">
+
+    💬 WhatsApp Us
+
+  </a>
+
+</div>
+  </div>
+      <div class="footer-bottom">
+        &copy; 2026 Pakistan Explorer — Islamabad.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function showTab(id, btn) {
+      document.querySelectorAll('.advisory-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

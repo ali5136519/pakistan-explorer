@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinations - Pakistan Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      background:
+        linear-gradient(180deg, rgba(22,48,42,0.7) 0%, rgba(22,48,42,0.85) 100%),
+        url('toursim pics/naran kaghan.jpg') center/cover no-repeat;
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--parchment-50);
+    }
+    .page-hero h1 { color: var(--parchment-50); font-size: clamp(32px, 5vw, 52px); margin-bottom: 12px; }
+    .page-hero p { font-size: 17px; color: var(--sage-300); max-width: 500px; margin: 0 auto; }
+
+    .filter-bar {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      justify-content: center; padding: 40px 24px 0;
+    }
+    .filter-btn {
+      padding: 10px 22px; border-radius: 999px;
+      border: 1.5px solid var(--line-200);
+      background: var(--parchment-50); color: var(--ink-600);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s ease; font-family: var(--font-body);
+    }
+    .filter-btn:hover { border-color: var(--pine-700); color: var(--pine-700); }
+    .filter-btn.active { background: var(--pine-700); color: var(--parchment-50); border-color: var(--pine-700); }
+
+    .dest-section { padding: 60px 0 20px; }
+    .dest-section:last-of-type { padding-bottom: 80px; }
+
+    .region-title {
+      font-size: 13px; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--rust-500);
+      font-weight: 700; margin-bottom: 24px;
+      padding-bottom: 10px; border-bottom: 2px solid var(--line-200);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html" class="active">Destinations</a></li>
+          <li><a href="packages.html">Packages</a></li>
+          <li><a href="trip-planner.html">Trip Planner</a></li>
+          <li><a href="travel-advisory.html">Advisory</a></li>
+          <li><a href="quiz.html" class="active">Quiz</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="review.html">Reviews</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="register.html" class="register-link">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <h1>Explore Pakistan</h1>
+    <p>25 destinations across lakes, mountains, history, and waterfalls — all in one place.</p>
+  </section>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterRegion('all', this)">All</button>
+    <button class="filter-btn" onclick="filterRegion('lakes', this)">Lakes</button>
+    <button class="filter-btn" onclick="filterRegion('historical', this)">Historical</button>
+    <button class="filter-btn" onclick="filterRegion('hills', this)">Hill Stations</button>
+    <button class="filter-btn" onclick="filterRegion('northern', this)">Northern</button>
+    <button class="filter-btn" onclick="filterRegion('waterfalls', this)">Waterfalls</button>
+  </div>
+
+  <main class="container">
+
+    <!-- LAKES -->
+    <section class="dest-section" data-region="lakes">
+      <p class="region-title">Best Lakes of Pakistan</p>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/saif ul malook.jpg" alt="Saif ul Malook">
+            <span class="card-badge">Lake</span>
+          </div>
+          <div class="card-content">
+            <h3>Saif-ul-Malook</h3>
+            <p>Famous for its crystal clear water — a glacial lake wrapped in Punjabi folklore.</p>
+            <div class="card-meta">
+              <span class="card-price">Kaghan Valley</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/attabad lake.jpg" alt="Attabad Lake">
+            <span class="card-badge">Lake</span>
+          </div>
+          <div class="card-content">
+            <h3>Attabad Lake</h3>
+            <p>Beautiful blue lake formed by a 2010 landslide — stunning turquoise colour in mountains.</p>
+            <div class="card-meta">
+              <span class="card-price">Hunza, GB</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/shangrila lake.jpg" alt="Shangrila Lake">
+            <span class="card-badge">Lake</span>
+          </div>
+          <div class="card-content">
+            <h3>Shangrila Lake</h3>
+            <p>Known as "Heaven on Earth" — peaceful resort lake with mirror-like water near Skardu.</p>
+            <div class="card-meta">
+              <span class="card-price">Skardu, GB</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/lalusar lake.jpg" alt="Lalusar Lake">
+            <span class="card-badge">Lake</span>
+          </div>
+          <div class="card-content">
+            <h3>Lalusar Lake</h3>
+            <p>Source of the Kunhar River — a stunning high-altitude lake in Naran.</p>
+            <div class="card-meta">
+              <span class="card-price">Naran, KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/sheosar lake.jpg" alt="Sheosar Lake">
+            <span class="card-badge">Lake</span>
+          </div>
+          <div class="card-content">
+            <h3>Sheosar Lake</h3>
+            <p>Highest altitude lake in Pakistan — located in the breathtaking Deosai Plains.</p>
+            <div class="card-meta">
+              <span class="card-price">Deosai, GB</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HISTORICAL -->
+    <section class="dest-section" data-region="historical">
+      <p class="region-title">Best Historical Places</p>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/badshahi mosque.jpg" alt="Badshahi Mosque">
+            <span class="card-badge">Heritage</span>
+          </div>
+          <div class="card-content">
+            <h3>Badshahi Mosque</h3>
+            <p>Famous Mughal architecture — one of the largest mosques in the world, Lahore.</p>
+            <div class="card-meta">
+              <span class="card-price">Lahore, Punjab</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/lahore fort.jpg" alt="Lahore Fort">
+            <span class="card-badge">UNESCO</span>
+          </div>
+          <div class="card-content">
+            <h3>Lahore Fort</h3>
+            <p>Historical royal fort — a UNESCO World Heritage Site with centuries of Mughal history.</p>
+            <div class="card-meta">
+              <span class="card-price">Lahore, Punjab</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/faisal mosque .jpg" alt="Faisal Mosque">
+            <span class="card-badge">Landmark</span>
+          </div>
+          <div class="card-content">
+            <h3>Faisal Mosque</h3>
+            <p>Largest mosque in Pakistan — an iconic modern architectural landmark in Islamabad.</p>
+            <div class="card-meta">
+              <span class="card-price">Islamabad</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/rohtas fort.jpg" alt="Rohtas Fort">
+            <span class="card-badge">UNESCO</span>
+          </div>
+          <div class="card-content">
+            <h3>Rohtas Fort</h3>
+            <p>UNESCO heritage site — a 16th century Afghan fortress with massive walls and grand gateways.</p>
+            <div class="card-meta">
+              <span class="card-price">Jhelum, Punjab</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/mohenjdaro .jpg" alt="Mohenjo Daro">
+            <span class="card-badge">Ancient</span>
+          </div>
+          <div class="card-content">
+            <h3>Mohenjo-daro</h3>
+            <p>Ancient Indus Valley Civilization site — one of the world's earliest cities, 5000 years old.</p>
+            <div class="card-meta">
+              <span class="card-price">Larkana, Sindh</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HILL STATIONS -->
+    <section class="dest-section" data-region="hills">
+      <p class="region-title">Best Hill Stations</p>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/muree.jpg" alt="Murree">
+            <span class="card-badge">Hill Station</span>
+          </div>
+          <div class="card-content">
+            <h3>Murree</h3>
+            <p>Popular hill station near Islamabad — cool weather, Mall Road, and pine forests.</p>
+            <div class="card-meta">
+              <span class="card-price">Punjab</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/nathia gali.jpg" alt="Nathia Gali">
+            <span class="card-badge">Hill Station</span>
+          </div>
+          <div class="card-content">
+            <h3>Nathia Gali</h3>
+            <p>Cool weather and scenic views — a charming hill town in the Galyat region of KPK.</p>
+            <div class="card-meta">
+              <span class="card-price">KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/malam jabba.jpg" alt="Malam Jabba">
+            <span class="card-badge">Skiing</span>
+          </div>
+          <div class="card-content">
+            <h3>Malam Jabba</h3>
+            <p>Pakistan's only ski resort — thrilling slopes in winter, chairlift rides in summer.</p>
+            <div class="card-meta">
+              <span class="card-price">Swat, KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/ayubia national park.jpg" alt="Ayubia">
+            <span class="card-badge">National Park</span>
+          </div>
+          <div class="card-content">
+            <h3>Ayubia National Park</h3>
+            <p>Beautiful forest and hiking trails — a protected national park in the Galyat hills.</p>
+            <div class="card-meta">
+              <span class="card-price">KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/neelum valley.jpg" alt="Neelum Valley">
+            <span class="card-badge">Valley</span>
+          </div>
+          <div class="card-content">
+            <h3>Neelum Valley</h3>
+            <p>Green valley with rivers and mountains — one of the most scenic valleys in Azad Kashmir.</p>
+            <div class="card-meta">
+              <span class="card-price">AJK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NORTHERN -->
+    <section class="dest-section" data-region="northern">
+      <p class="region-title">Best Northern Destinations</p>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/hunza valley.jpg" alt="Hunza Valley">
+            <span class="card-badge">Most Visited</span>
+          </div>
+          <div class="card-content">
+            <h3>Hunza Valley</h3>
+            <p>Famous for its beauty and culture — snow peaks, orchards, and the Karakoram Highway.</p>
+            <div class="card-meta">
+              <span class="card-price">Gilgit-Baltistan</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/skardu.jpg" alt="Skardu">
+            <span class="card-badge">Adventure</span>
+          </div>
+          <div class="card-content">
+            <h3>Skardu</h3>
+            <p>Gateway to high mountains — K2 basecamp, Shangrila resort, and Katpana Desert.</p>
+            <div class="card-meta">
+              <span class="card-price">Gilgit-Baltistan</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/fairy medeows.jpg" alt="Fairy Meadows">
+            <span class="card-badge">Trekking</span>
+          </div>
+          <div class="card-content">
+            <h3>Fairy Meadows</h3>
+            <p>Heaven for nature lovers — lush alpine meadow at the base of Nanga Parbat.</p>
+            <div class="card-meta">
+              <span class="card-price">Diamer, GB</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/khanjerab pass.jpg" alt="Khunjerab Pass">
+            <span class="card-badge">Border</span>
+          </div>
+          <div class="card-content">
+            <h3>Khunjerab Pass</h3>
+            <p>Highest paved border crossing in the world — Pakistan meets China at 4,693 metres.</p>
+            <div class="card-meta">
+              <span class="card-price">GB, China Border</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/gilgit.jpg" alt="Gilgit">
+            <span class="card-badge">Northern Hub</span>
+          </div>
+          <div class="card-content">
+            <h3>Gilgit City</h3>
+            <p>Centre of northern tourism — gateway city connecting all major GB destinations.</p>
+            <div class="card-meta">
+              <span class="card-price">Gilgit-Baltistan</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WATERFALLS -->
+    <section class="dest-section" data-region="waterfalls">
+      <p class="region-title">Best Waterfalls of Pakistan</p>
+      <div class="grid">
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/noori waterfall.jpg" alt="Noori Waterfall">
+            <span class="card-badge">Waterfall</span>
+          </div>
+          <div class="card-content">
+            <h3>Noori Waterfall</h3>
+            <p>Hidden natural waterfall tucked away in the forests of Haripur district.</p>
+            <div class="card-meta">
+              <span class="card-price">Haripur, KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/umbrella waterfall.jpg" alt="Umbrella Waterfall">
+            <span class="card-badge">Waterfall</span>
+          </div>
+          <div class="card-content">
+            <h3>Umbrella Waterfall</h3>
+            <p>Unique umbrella-shaped beautiful waterfall — a popular picnic spot near Abbottabad.</p>
+            <div class="card-meta">
+              <span class="card-price">Abbottabad, KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/manthokha waterfall.jpg" alt="Manthokha Waterfall">
+            <span class="card-badge">Waterfall</span>
+          </div>
+          <div class="card-content">
+            <h3>Manthokha Waterfall</h3>
+            <p>One of the highest waterfalls in Pakistan — a spectacular cascade near Skardu.</p>
+            <div class="card-meta">
+              <span class="card-price">Skardu, GB</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/sajikot waterfall.jpg" alt="Sajikot Waterfall">
+            <span class="card-badge">Waterfall</span>
+          </div>
+          <div class="card-content">
+            <h3>Sajikot Waterfall</h3>
+            <p>Beautiful picnic spot — a charming waterfall surrounded by lush greenery in Havelian.</p>
+            <div class="card-meta">
+              <span class="card-price">Havelian, KPK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-media">
+            <img src="toursim pics/dhani waterfall.jpg" alt="Dhani Waterfall">
+            <span class="card-badge">Waterfall</span>
+          </div>
+          <div class="card-content">
+            <h3>Dhani Waterfall</h3>
+            <p>Highest waterfall in Kashmir — a stunning cascade deep in Azad Kashmir's forests.</p>
+            <div class="card-meta">
+              <span class="card-price">AJK</span>
+              <a href="packages.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">See Packages</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Pakistan Explorer</h4>
+          <p>A platform for discovering and booking domestic tourism experiences across Pakistan.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="packages.html">Packages</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="review.html">Reviews</a></li>
+          </ul>
+        </div>
+       <div>
+
+  <h4>Contact</h4>
+
+  <p>Islamabad, Pakistan</p>
+
+  <a href="mailto:ali5136519@gmail.com"
+
+     style="color:var(--sage-300);font-size:14px;">
+
+ali5136519@gmail.com
+
+  </a>
+
+  <br>
+
+  <a href="https://wa.me/923239399316"
+
+     target="_blank"
+
+     style="color:#25D366;font-size:14px;font-weight:600;margin-top:8px;display:inline-block;">
+
+    💬 WhatsApp Us
+
+  </a>
+
+</div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Pakistan Explorer — Islamabad.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function filterRegion(region, clickedBtn) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      clickedBtn.classList.add('active');
+      document.querySelectorAll('.dest-section').forEach(section => {
+        section.style.display = (region === 'all' || section.dataset.region === region) ? 'block' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>

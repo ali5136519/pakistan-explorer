@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - Pakistan Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      background:
+        linear-gradient(rgba(22,48,42,0.75), rgba(22,48,42,0.88)),
+        url('toursim pics/naran kaghan.jpg') center/cover no-repeat;
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--parchment-50);
+    }
+
+    .page-hero h1 {
+      color: var(--parchment-50);
+      font-size: clamp(32px, 5vw, 52px);
+      margin-bottom: 12px;
+    }
+
+    .page-hero p {
+      font-size: 17px;
+      color: var(--sage-300);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .gallery-section {
+      padding: 60px 0 80px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      aspect-ratio: 4/3;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(22, 48, 42, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    .zoom-icon {
+      font-size: 36px;
+      color: white;
+    }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 36px;
+      cursor: pointer;
+      z-index: 1001;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .lightbox-close:hover {
+      opacity: 1;
+    }
+    .lightbox-caption {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 15px;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 20px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="nav-wrap">
+      <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html">Destinations</a></li>
+          <li><a href="packages.html">Packages</a></li>
+          <li><a href="trip-planner.html">Trip Planner</a></li>
+          <li><a href="travel-advisory.html">Advisory</a></li>
+          <li><a href="quiz.html" class="active">Quiz</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="gallery.html" class="active">Gallery</a></li>
+          <li><a href="review.html">Reviews</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="register.html" class="register-link">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <h1>Photo Gallery</h1>
+    <p>A visual journey through Pakistan's most breathtaking landscapes and heritage sites.</p>
+  </section>
+
+  <!-- ===== GALLERY GRID ===== -->
+  <section class="gallery-section">
+    <div class="container">
+      <div class="gallery-grid" id="gallery-grid">
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/hunza valley.jpg', 'Hunza Valley')">
+          <img src="toursim pics/hunza valley.jpg" alt="Hunza Valley">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/skardu.jpg', 'Skardu')">
+          <img src="toursim pics/skardu.jpg" alt="Skardu">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/fairy medeows.jpg', 'Fairy Meadows')">
+          <img src="toursim pics/fairy medeows.jpg" alt="Fairy Meadows">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/attabad lake.jpg', 'Attabad Lake')">
+          <img src="toursim pics/attabad lake.jpg" alt="Attabad Lake">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/saif ul malook.jpg', 'Saif-ul-Malook Lake')">
+          <img src="toursim pics/saif ul malook.jpg" alt="Saif ul Malook">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/shangrila lake.jpg', 'Shangrila Lake')">
+          <img src="toursim pics/shangrila lake.jpg" alt="Shangrila Lake">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/lalusar lake.jpg', 'Lalusar Lake')">
+          <img src="toursim pics/lalusar lake.jpg" alt="Lalusar Lake">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/sheosar lake.jpg', 'Sheosar Lake')">
+          <img src="toursim pics/sheosar lake.jpg" alt="Sheosar Lake">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/neelum valley.jpg', 'Neelum Valley')">
+          <img src="toursim pics/neelum valley.jpg" alt="Neelum Valley">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/naran kaghan.jpg', 'Naran Kaghan')">
+          <img src="toursim pics/naran kaghan.jpg" alt="Naran Kaghan">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/swat .jpg', 'Swat Valley')">
+          <img src="toursim pics/swat .jpg" alt="Swat Valley">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/malam jabba.jpg', 'Malam Jabba')">
+          <img src="toursim pics/malam jabba.jpg" alt="Malam Jabba">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/muree.jpg', 'Murree')">
+          <img src="toursim pics/muree.jpg" alt="Murree">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/nathia gali.jpg', 'Nathia Gali')">
+          <img src="toursim pics/nathia gali.jpg" alt="Nathia Gali">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/nathia gali p.jpg', 'Nathia Gali')">
+          <img src="toursim pics/nathia gali p.jpg" alt="Nathia Gali 2">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/ayubia national park.jpg', 'Ayubia National Park')">
+          <img src="toursim pics/ayubia national park.jpg" alt="Ayubia National Park">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/khanpur dam.jpg', 'Khanpur Dam')">
+          <img src="toursim pics/khanpur dam.jpg" alt="Khanpur Dam">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/gilgit.jpg', 'Gilgit')">
+          <img src="toursim pics/gilgit.jpg" alt="Gilgit">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/khanjerab pass.jpg', 'Khunjerab Pass')">
+          <img src="toursim pics/khanjerab pass.jpg" alt="Khunjerab Pass">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/badshahi mosque.jpg', 'Badshahi Mosque')">
+          <img src="toursim pics/badshahi mosque.jpg" alt="Badshahi Mosque">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/lahore fort.jpg', 'Lahore Fort')">
+          <img src="toursim pics/lahore fort.jpg" alt="Lahore Fort">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/lahore heritage .jpg', 'Lahore Heritage')">
+          <img src="toursim pics/lahore heritage .jpg" alt="Lahore Heritage">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/rohtas fort.jpg', 'Rohtas Fort')">
+          <img src="toursim pics/rohtas fort.jpg" alt="Rohtas Fort">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/faisal mosque .jpg', 'Faisal Mosque')">
+          <img src="toursim pics/faisal mosque .jpg" alt="Faisal Mosque">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/islamabad heritage.jpg', 'Islamabad Heritage')">
+          <img src="toursim pics/islamabad heritage.jpg" alt="Islamabad Heritage">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/mohenjdaro .jpg', 'Mohenjo-daro')">
+          <img src="toursim pics/mohenjdaro .jpg" alt="Mohenjo Daro">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/taxila.jpg', 'Taxila')">
+          <img src="toursim pics/taxila.jpg" alt="Taxila">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/noori waterfall.jpg', 'Noori Waterfall')">
+          <img src="toursim pics/noori waterfall.jpg" alt="Noori Waterfall">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/umbrella waterfall.jpg', 'Umbrella Waterfall')">
+          <img src="toursim pics/umbrella waterfall.jpg" alt="Umbrella Waterfall">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/manthokha waterfall.jpg', 'Manthokha Waterfall')">
+          <img src="toursim pics/manthokha waterfall.jpg" alt="Manthokha Waterfall">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/sajikot waterfall.jpg', 'Sajikot Waterfall')">
+          <img src="toursim pics/sajikot waterfall.jpg" alt="Sajikot Waterfall">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/dhani waterfall.jpg', 'Dhani Waterfall')">
+          <img src="toursim pics/dhani waterfall.jpg" alt="Dhani Waterfall">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+        <div class="gallery-item" onclick="openLightbox('toursim pics/naran kaghan.jpg', 'Naran Valley')">
+          <img src="toursim pics/naran kaghan.jpg" alt="Naran Valley">
+          <div class="gallery-overlay"><span class="zoom-icon">🔍</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Pakistan Explorer</h4>
+          <p>A platform for discovering and booking domestic tourism experiences across Pakistan.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="packages.html">Packages</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="review.html">Reviews</a></li>
+          </ul>
+        </div>
+       <div>
+
+  <h4>Contact</h4>
+
+  <p>Islamabad, Pakistan</p>
+
+  <a href="mailto:ali5136519@gmail.com"
+
+     style="color:var(--sage-300);font-size:14px;">
+
+ali5136519@gmail.com
+
+  </a>
+
+  <br>
+
+  <a href="https://wa.me/923239399316"
+
+     target="_blank"
+
+     style="color:#25D366;font-size:14px;font-weight:600;margin-top:8px;display:inline-block;">
+
+    💬 WhatsApp Us
+
+  </a>
+
+</div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Pakistan Explorer — Islamabad.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function openLightbox(imageSrc, caption) {
+      document.getElementById('lightbox-img').src = imageSrc;
+      document.getElementById('lightbox-img').alt = caption;
+      document.getElementById('lightbox-caption').textContent = caption;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event && event.target !== document.getElementById('lightbox')) {
+        return;
+
+      }
+
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('lightbox-img').src = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+
+  </script>
+
+</body>
+</html>

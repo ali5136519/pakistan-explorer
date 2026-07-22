@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Pakistan Explorer Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">Pakistan<span>Explorer</span><small>Admin Panel</small></div>
+    <nav class="sidebar-nav">
+      <p class="nav-section-label">Main</p>
+      <a href="admin-dashboard.html" class="active"><span class="icon">📊</span> Dashboard</a>
+      <p class="nav-section-label">Manage</p>
+      <a href="admin-destinations.html"><span class="icon">📍</span> Destinations</a>
+      <a href="admin-packages.html"><span class="icon">🎒</span> Packages</a>
+      <a href="admin-bookings.html"><span class="icon">📅</span> Bookings</a>
+      <a href="admin-users.html"><span class="icon">👥</span> Users</a>
+      <a href="admin-reviews.html"><span class="icon">⭐</span> Reviews</a>
+    </nav>
+    <div class="sidebar-footer"><a href="../index.html">🌐 View Website</a></div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><h1>Dashboard</h1><p>Welcome back, Admin — here's what's happening today.</p></div>
+      <div class="topbar-right"><div class="admin-badge"><div class="admin-avatar">A</div>Admin</div></div>
+    </div>
+
+    <div class="page-content">
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon green">📍</div>
+          <div class="stat-info">
+            <div class="number" id="stat-dest">—</div>
+            <div class="label">Destinations</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">🎒</div>
+          <div class="stat-info">
+            <div class="number" id="stat-pkg">—</div>
+            <div class="label">Packages</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">📅</div>
+          <div class="stat-info">
+            <div class="number" id="stat-book">—</div>
+            <div class="label">Total Bookings</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">👥</div>
+          <div class="stat-info">
+            <div class="number" id="stat-users">—</div>
+            <div class="label">Registered Users</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-head">
+          <div><h3>Recent Bookings</h3><p>Latest bookings across all packages</p></div>
+          <a href="admin-bookings.html" class="btn-add">View All →</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Traveler</th>
+              <th>Package</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="recent-bookings"></tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <div class="table-head">
+          <div><h3>Pending Reviews</h3><p>Reviews awaiting approval</p></div>
+          <a href="admin-reviews.html" class="btn-add">View All →</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Reviewer</th>
+              <th>Package</th>
+              <th>Rating</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="pending-reviews"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
+  if (!currentUser || currentUser.role !== 'admin') {
+    window.location.href = '../login.html';
+  }
+    const defaultDestinations = [
+      {name:'Hunza Valley'},{name:'Skardu'},{name:'Fairy Meadows'},{name:'Attabad Lake'},{name:'Saif-ul-Malook'},
+      {name:'Shangrila Lake'},{name:'Lalusar Lake'},{name:'Sheosar Lake'},{name:'Neelum Valley'},{name:'Naran Kaghan'},
+      {name:'Swat Valley'},{name:'Malam Jabba'},{name:'Murree'},{name:'Nathia Gali'},{name:'Ayubia National Park'},
+      {name:'Badshahi Mosque'},{name:'Lahore Fort'},{name:'Rohtas Fort'},{name:'Faisal Mosque'},{name:'Mohenjo-daro'},
+      {name:'Noori Waterfall'},{name:'Umbrella Waterfall'},{name:'Manthokha Waterfall'},{name:'Sajikot Waterfall'},{name:'Khunjerab Pass'}
+    ];
+
+    const defaultPackages = [{name:'Hunza Family Tour'},{name:'Naran Kaghan Family Tour'},{name:'Neelum Valley Family Tour'},{name:'Murree Family Tour'},{name:'Swat Family Tour'},{name:'Hunza Honeymoon Tour'},{name:'Skardu Honeymoon Tour'},{name:'Murree Couple Tour'},{name:'Neelum Valley Honeymoon'},{name:'Nathia Gali Couple Tour'},{name:'Lahore Heritage Tour'},{name:'Taxila Day Tour'},{name:'Rohtas Fort Tour'},{name:'Mohenjo-daro Tour'},{name:'Islamabad Heritage Tour'},{name:'Murree Student Trip'},{name:'Nathia Gali Budget Trip'},{name:'Islamabad City Tour'},{name:'Khanpur Dam Trip'},{name:'Swat Budget Trip'},{name:'Fairy Meadows Trek'},{name:'Northern Grand Tour'},{name:'Lakes Exploration Tour'},{name:'Waterfall Adventure Tour'},{name:'Winter Snow Package'}];
+
+    const defaultBookings = [
+      {id:'BK-1042',name:'Ahmed Raza',pkg:'Hunza Family Tour',date:'15 Jul 2026',amount:60000,status:'Confirmed'},
+      {id:'BK-1041',name:'Sara Malik',pkg:'Neelum Valley Honeymoon',date:'18 Jul 2026',amount:15000,status:'Pending'},
+      {id:'BK-1040',name:'Usman Tariq',pkg:'Fairy Meadows Trek',date:'20 Jul 2026',amount:18000,status:'Confirmed'},
+      {id:'BK-1039',name:'Fatima Zaheer',pkg:'Lahore Heritage Tour',date:'22 Jul 2026',amount:14000,status:'Cancelled'},
+      {id:'BK-1038',name:'Zain ul Abideen',pkg:'Skardu & Deosai',date:'25 Jul 2026',amount:66000,status:'Pending'}
+    ];
+
+    const defaultUsers = [{name:'Ahmed Raza',status:'Active'},{name:'Sara Malik',status:'Active'},{name:'Usman Tariq',status:'Active'},{name:'Fatima Zaheer',status:'Blocked'},{name:'Zain ul Abideen',status:'Active'},{name:'Hira Baig',status:'Active'},{name:'Hassan Ali',status:'Active'},{name:'Amna Sheikh',status:'Active'}];
+
+    const defaultReviews = [
+      {name:'Ahmed Raza',pkg:'Hunza Valley Expedition',rating:5,status:'Approved'},
+      {name:'Sara Malik',pkg:'Neelum Valley Honeymoon',rating:5,status:'Pending'},
+      {name:'Usman Tariq',pkg:'Fairy Meadows Trek',rating:4,status:'Approved'},
+      {name:'Fatima Zaheer',pkg:'Lahore Heritage Tour',rating:5,status:'Approved'},
+      {name:'Zain ul Abideen',pkg:'Skardu & Deosai',rating:5,status:'Pending'}
+    ];
+
+    const destinations = JSON.parse(localStorage.getItem('pe_destinations')) || defaultDestinations;
+    const packages = JSON.parse(localStorage.getItem('pe_packages')) || defaultPackages;
+    const bookings = JSON.parse(localStorage.getItem('pe_bookings')) || defaultBookings;
+    const users = JSON.parse(localStorage.getItem('pe_users')) || defaultUsers;
+    const reviews = JSON.parse(localStorage.getItem('pe_reviews')) || defaultReviews;
+
+    document.getElementById('stat-dest').textContent = destinations.length;
+    document.getElementById('stat-pkg').textContent = packages.length;
+    document.getElementById('stat-book').textContent = bookings.length;
+    document.getElementById('stat-users').textContent = users.length;
+
+    const statusBadge = { Confirmed: 'badge-success', Pending: 'badge-warning', Cancelled: 'badge-danger' };
+    const recentBookings = bookings.slice(0, 5);
+    document.getElementById('recent-bookings').innerHTML = recentBookings.map(b => `
+      <tr>
+        <td>#${b.id}</td>
+        <td>${b.name}</td>
+        <td>${b.pkg}</td>
+        <td>${b.date}</td>
+        <td>PKR ${b.amount.toLocaleString()}</td>
+        <td><span class="badge ${statusBadge[b.status]}">${b.status}</span></td>
+      </tr>
+    `).join('');
+
+    const pendingReviews = reviews.filter(r => r.status === 'Pending');
+    document.getElementById('pending-reviews').innerHTML = pendingReviews.length
+      ? pendingReviews.map(r => `
+          <tr>
+            <td>${r.name}</td>
+            <td>${r.pkg}</td>
+            <td>${'⭐'.repeat(r.rating)}</td>
+            <td><span class="badge badge-warning">Pending</span></td>
+          </tr>
+        `).join('')
+      : '<tr><td colspan="4" style="text-align:center;padding:24px;color:#888;">No pending reviews</td></tr>';
+  async function loadDashboardStats() {
+  const token = localStorage.getItem('pe_token');
+  if (!token) return;
+
+  try {
+    const [bookingsRes, reviewsRes] = await Promise.all([
+      fetch('http://localhost:5000/api/bookings/all', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      }),
+      fetch('http://localhost:5000/api/reviews/all', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+    ]);
+
+    const bookings = await bookingsRes.json();
+    const reviews = await reviewsRes.json();
+
+    if (bookingsRes.ok) {
+      document.getElementById('stat-book').textContent = bookings.length;
+
+      const recentBookings = bookings.slice(0, 5);
+      const statusBadge = {
+        confirmed: 'badge-success',
+        pending: 'badge-warning',
+        cancelled: 'badge-danger'
+      };
+
+      document.getElementById('recent-bookings').innerHTML = recentBookings.map(b => `
+        <tr>
+          <td>#${b._id.slice(-6).toUpperCase()}</td>
+          <td>${b.fullName}</td>
+          <td>${b.packageName}</td>
+          <td>${new Date(b.travelDate).toLocaleDateString()}</td>
+          <td>PKR ${b.totalAmount.toLocaleString()}</td>
+          <td><span class="badge ${statusBadge[b.status]}">${b.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    if (reviewsRes.ok) {
+      const pendingReviews = reviews.filter(r => r.status === 'pending');
+
+      document.getElementById('pending-reviews').innerHTML = pendingReviews.length
+        ? pendingReviews.map(r => `
+            <tr>
+              <td>${r.name}</td>
+              <td>${r.packageName}</td>
+              <td>${'⭐'.repeat(r.rating)}</td>
+              <td><span class="badge badge-warning">Pending</span></td>
+            </tr>
+          `).join('')
+        : '<tr><td colspan="4" style="text-align:center;padding:24px;color:#888;">No pending reviews</td></tr>';
+    }
+
+  } catch (error) {
+    console.log('Could not load dashboard data:', error);
+  }
+}
+
+loadDashboardStats();
+  </script>
+
+</body>
+</html>
