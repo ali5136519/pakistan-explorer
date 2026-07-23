@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const {
   sendBookingConfirmation,
   sendAdminBookingNotification
-} = require('../emailService');
+} = require('../emailservice');
 
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1];
