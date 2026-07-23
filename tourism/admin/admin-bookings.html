@@ -152,8 +152,7 @@ async function loadBookingsFromDB() {
   const token = localStorage.getItem('pe_token');
   if (!token) return;
 
-  try {
-    const response = await fetch('http://localhost:5000/api/bookings/all', {
+  try {const response = await fetch('https://pakistan-explorer-production.up.railway.app/api/auth/login', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
@@ -250,7 +249,7 @@ loadBookingsFromDB();
   try {
     const token = localStorage.getItem('pe_token');
     const response = await fetch(
-      'http://localhost:5000/api/bookings/' + booking._id + '/status',
+      'https://pakistan-explorer-production.up.railway.app/api/bookings/' + booking._id + '/status',
       {
         method: 'PUT',
         headers: {
@@ -289,7 +288,7 @@ loadBookingsFromDB();
   try {
     const token = localStorage.getItem('pe_token');
     await fetch(
-      'http://localhost:5000/api/bookings/' + booking._id + '/status',
+      'https://pakistan-explorer-production.up.railway.app/api/bookings/' + booking._id + '/status',
       {
         method: 'PUT',
         headers: {

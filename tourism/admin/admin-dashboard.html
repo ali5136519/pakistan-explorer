@@ -176,11 +176,11 @@
   if (!token) return;
 
   try {
-    const [bookingsRes, reviewsRes] = await Promise.all([
-      fetch('http://localhost:5000/api/bookings/all', {
+    const [bookingsRes, revhttpreviewsRes] = await Promise.all([
+      fetch('https://pakistan-explorer-production.up.railway.app/api/bookings/all', {
         headers: { 'Authorization': 'Bearer ' + token }
-      }),
-      fetch('http://localhost:5000/api/reviews/all', {
+      })
+      ('https://pakistan-explorer-production.up.railway.app/api/reviews/all', {
         headers: { 'Authorization': 'Bearer ' + token }
       })
     ]);
