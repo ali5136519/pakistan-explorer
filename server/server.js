@@ -25,7 +25,10 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../tourism/index.html'));
+  res.json({
+    message: 'Pakistan Explorer Backend is running successfully.',
+    status: 'OK'
+});
 });
 
 mongoose.connect(process.env.MONGODB_URI)
