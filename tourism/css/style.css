@@ -514,3 +514,7 @@ footer {
     display:block;
   }
 }
+
+.mobile-only{
+    display:block !important;
+}
