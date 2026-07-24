@@ -331,7 +331,6 @@ footer {
 
 /* ---- Responsive ---- */
 @media (max-width: 860px) {
-  .nav-wrap { flex-direction: column; align-items: flex-start; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 
@@ -344,6 +343,10 @@ footer {
   .nav-wrap {
     padding: 12px 16px;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
   }
 
   nav {
@@ -352,6 +355,7 @@ footer {
     top: 100%;
     left: 0;
     right: 0;
+    width: 100%;
     background: var(--pine-900);
     padding: 16px;
     z-index: 999;
@@ -380,16 +384,19 @@ footer {
     display: none;
   }
 
-  .hamburger {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-    background: none;
-    border: none;
-  }
+ .hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
 
+  margin-left: auto;
+  position: relative;
+  z-index: 1001;
+}
   .hamburger span {
     display: block;
     width: 24px;
@@ -430,3 +437,71 @@ footer {
 
 /* Desktop pe hamburger nahi dikhega */
 .hamburger { display: none; }
+
+
+/* ===== FINAL MOBILE MENU ===== */
+
+.hamburger{
+    display:none;
+}
+
+@media (max-width:768px){
+
+.nav-wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:nowrap;
+}
+
+.hamburger{
+    display:flex !important;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:45px;
+    height:45px;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    z-index:1001;
+}
+
+.hamburger span{
+    display:block;
+    width:26px;
+    height:3px;
+    background:#fff;
+    margin:3px 0;
+    border-radius:2px;
+}
+
+#main-nav{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    width:100%;
+    background:#16302a;
+    z-index:999;
+}
+
+#main-nav.open{
+    display:block;
+}
+
+#main-nav ul{
+    display:flex;
+    flex-direction:column;
+}
+
+#main-nav ul li a{
+    display:block;
+    padding:15px;
+}
+
+.nav-auth{
+    display:none;
+}
+
+}
