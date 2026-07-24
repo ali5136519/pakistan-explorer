@@ -253,9 +253,16 @@
 <body>
 
   <header>
+    <header>
     <div class="nav-wrap">
       <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
-      <nav>
+  <button class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav id="main-nav">
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="destinations.html">Destinations</a></li>
@@ -631,6 +638,22 @@ ali5136519@gmail.com
   }
 
   loadReviews();
+
+  function toggleNav() {
+    const nav = document.getElementById('main-nav');
+    const hamburger = document.getElementById('hamburger');
+    nav.classList.toggle('open');
+    hamburger.classList.toggle('active');
+  }
+
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('main-nav');
+    const hamburger = document.getElementById('hamburger');
+    if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+      nav.classList.remove('open');
+      hamburger.classList.remove('active');
+    }
+  });
 
 </script>
 </body>
