@@ -518,3 +518,13 @@ footer {
 .mobile-only{
     display:block !important;
 }
+
+@media (max-width:768px){
+
+#main-nav .mobile-only{
+    display:list-item !important;
+    visibility:visible !important;
+    opacity:1 !important;
+}
+
+}
