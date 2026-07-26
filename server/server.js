@@ -18,17 +18,20 @@ const authRoutes = require('./routes/auth');
 const bookingRoutes = require('./routes/bookings');
 const reviewRoutes = require('./routes/reviews');
 const contactRoutes = require('./routes/contact');
+const userRoutes = require('./routes/users');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'Pakistan Explorer Backend is running successfully.',
+   /* message: 'Pakistan Explorer Backend is running successfully.',*/
+   message: 'ALI NEW SERVER 2026',
     status: 'OK'
-});
+  });
 });
 
 mongoose.connect(process.env.MONGODB_URI)

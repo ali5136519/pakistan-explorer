@@ -103,10 +103,10 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
-  if (!currentUser || currentUser.role !== 'admin') {
-    window.location.href = '../login.html';
-  }
+  const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+if (!currentUser || currentUser.role !== 'admin') {
+  window.location.href = '../login.html';
+}
     const defaultUsers = [
       { name: 'Ahmed Raza', email: 'ahmed@example.com', city: 'Lahore', joined: 'Jan 2026', bookings: 3, status: 'Active' },
       { name: 'Sara Malik', email: 'sara@example.com', city: 'Karachi', joined: 'Feb 2026', bookings: 1, status: 'Active' },
@@ -117,9 +117,51 @@
       { name: 'Hassan Ali', email: 'hassan@example.com', city: 'Multan', joined: 'May 2026', bookings: 1, status: 'Active' },
       { name: 'Amna Sheikh', email: 'amna@example.com', city: 'Islamabad', joined: 'Jun 2026', bookings: 3, status: 'Active' }
     ];
-
-    let users = JSON.parse(localStorage.getItem('pe_users')) || defaultUsers;
+    let users = [];
     let currentFilter = 'all';
+    async function loadUsersFromDB() {
+
+  const token = localStorage.getItem('pe_admin_token');
+
+  if (!token) return;
+
+  try {
+
+    const response = await fetch(
+      'https://pakistan-explorer-production.up.railway.app/api/users/all',
+      {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }
+    );
+
+    if (response.ok) {
+
+      const dbUsers = await response.json();
+
+      users = dbUsers.map(u => ({
+  _id: u._id,
+  name: u.name,
+  email: u.email,
+  city: u.city,
+  joined: u.joined,
+  bookings: u.bookings,
+  status: u.status
+}));
+
+      updateStats();
+      applyFilter();
+
+    }
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+}
 
     function save() { localStorage.setItem('pe_users', JSON.stringify(users)); }
 
@@ -214,9 +256,7 @@
         if (e.target === this) this.classList.remove('open');
       });
     });
-
-    updateStats();
-    applyFilter();
+    loadUsersFromDB();
   </script>
 
 </body>

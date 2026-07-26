@@ -171,10 +171,10 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
-  if (!currentUser || currentUser.role !== 'admin') {
-    window.location.href = '../login.html';
-  }
+  const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+if (!currentUser || currentUser.role !== 'admin') {
+  window.location.href = '../login.html';
+}
     const defaultPackages = [
       { name: 'Hunza Family Tour', cat: 'Family', dur: '5 Days / 4 Nights', price: 15000, people: 20, loc: 'Hunza, GB' },
       { name: 'Naran Kaghan Family Tour', cat: 'Family', dur: '2 Days / 1 Night', price: 6000, people: 20, loc: 'Naran, KPK' },

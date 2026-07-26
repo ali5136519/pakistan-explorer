@@ -122,7 +122,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
+const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
   if (!currentUser || currentUser.role !== 'admin') {
     window.location.href = '../login.html';
   }
@@ -137,10 +137,8 @@
       { id: 'BK-1035', name: 'Amna Sheikh', city: 'Islamabad', pkg: 'Khanpur Dam Trip', date: '05 Aug 2026', people: 6, amount: 18000, status: 'Confirmed' }
     ];
 
-    let bookings = JSON.parse(localStorage.getItem('pe_bookings')) || defaultBookings;
+    let bookings = [];
     let currentFilter = 'all';
-
-    function save() { localStorage.setItem('pe_bookings', JSON.stringify(bookings)); }
 
     function updateStats() {
       document.getElementById('count-confirmed').textContent = bookings.filter(b => b.status === 'Confirmed').length;
@@ -149,15 +147,16 @@
       document.getElementById('booking-count').textContent = bookings.length + ' total bookings';
     }
 async function loadBookingsFromDB() {
-  const token = localStorage.getItem('pe_token');
+  const token = localStorage.getItem('pe_admin_token');
   if (!token) return;
 
-  try {const response = await fetch('https://pakistan-explorer-production.up.railway.app/api/auth/login', {
+  try {const response = await fetch('https://pakistan-explorer-production.up.railway.app/api/bookings/all',{
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
     if (response.ok) {
-      const dbBookings = await response.json();
+       const dbBookings = await response.json();
+      console.log(dbBookings);
 
       bookings = dbBookings.map(b => ({
         id: b._id.slice(-6).toUpperCase(),
@@ -171,13 +170,12 @@ async function loadBookingsFromDB() {
         status: b.status.charAt(0).toUpperCase() + b.status.slice(1)
       }));
 
-      save();
       updateStats();
       applyFilter();
     }
 
   } catch (error) {
-    console.log('Loading from localStorage instead');
+    console.log(error);
   }
 }
 
@@ -247,18 +245,19 @@ loadBookingsFromDB();
   const booking = bookings[index];
 
   try {
-    const token = localStorage.getItem('pe_token');
-    const response = await fetch(
-      'https://pakistan-explorer-production.up.railway.app/api/bookings/' + booking._id + '/status',
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({ status: 'confirmed' })
-      }
-    );
+    const token = localStorage.getItem('pe_admin_token');
+    
+        const response = await fetch(
+  'https://pakistan-explorer-production.up.railway.app/api/bookings/' + booking._id + '/status',
+  {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ status: 'confirmed' })
+  }
+);
 
     if (response.ok) {
       bookings[index].status = 'Confirmed';
@@ -286,7 +285,7 @@ loadBookingsFromDB();
   const booking = bookings[index];
 
   try {
-    const token = localStorage.getItem('pe_token');
+    const token = localStorage.getItem('pe_admin_token');
     await fetch(
       'https://pakistan-explorer-production.up.railway.app/api/bookings/' + booking._id + '/status',
       {
@@ -324,10 +323,7 @@ loadBookingsFromDB();
         if (e.target === this) this.classList.remove('open');
       });
     });
-
-    updateStats();
-    applyFilter();
-  </script>
+</script>
 
 </body>
 </html>

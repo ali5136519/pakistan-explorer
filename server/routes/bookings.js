@@ -18,8 +18,8 @@ function verifyToken(req, res, next) {
     res.status(401).json({ message: 'Invalid token' });
   }
 }
-
 router.post('/', verifyToken, async (req, res) => {
+  console.log("STEP 1: Booking request received");
   try {
     const {
       fullName, email, phone, city,
@@ -34,8 +34,12 @@ router.post('/', verifyToken, async (req, res) => {
       travelDate, travelers, totalAmount,
       specialRequests: specialRequests || ''
     });
-
+console.log("STEP 2: Before booking.save()");
     await booking.save();
+    console.log("STEP 3: Booking saved");
+    console.log("STEP 4: Sending admin email");
+    console.log("STEP 5: Admin email sent");
+  
     await sendAdminBookingNotification({
     name: fullName,
     email: email,
@@ -46,15 +50,18 @@ router.post('/', verifyToken, async (req, res) => {
     travelers: travelers,
     totalAmount: totalAmount
 });
-    await sendBookingConfirmation({
+
+console.log("STEP 6: Sending user email");
+console.log("STEP 7: User email sent");
+ await sendBookingConfirmation({
     name: fullName,
     email: email,
     packageName: packageName,
     travelDate: travelDate,
     travelers: travelers
 });
-
-    res.status(201).json({
+console.log("STEP 8: Sending response");   
+res.status(201).json({
       message: 'Booking submitted successfully',
       booking
     });

@@ -104,7 +104,7 @@
   </div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_user'));
+const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
   if (!currentUser || currentUser.role !== 'admin') {
     window.location.href = '../login.html';
   }
@@ -172,18 +172,22 @@
         `).join('')
       : '<tr><td colspan="4" style="text-align:center;padding:24px;color:#888;">No pending reviews</td></tr>';
   async function loadDashboardStats() {
-  const token = localStorage.getItem('pe_token');
+ const token = localStorage.getItem('pe_admin_token');
   if (!token) return;
 
   try {
-    const [bookingsRes, revhttpreviewsRes] = await Promise.all([
-      fetch('https://pakistan-explorer-production.up.railway.app/api/bookings/all', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      })
-      ('https://pakistan-explorer-production.up.railway.app/api/reviews/all', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      })
-    ]);
+   const [bookingsRes, reviewsRes] = await Promise.all([
+fetch('https://pakistan-explorer-production.up.railway.app/api/bookings/all', {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  }),
+fetch('https://pakistan-explorer-production.up.railway.app/api/reviews/all', {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  })
+]);
 
     const bookings = await bookingsRes.json();
     const reviews = await reviewsRes.json();

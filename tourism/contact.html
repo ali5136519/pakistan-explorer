@@ -185,12 +185,11 @@
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="review.html">Reviews</a></li>
           <li><a href="contact.html" class="active">Contact</a></li>
+          <li><a href="login.html">Log In</a></li>
+           <li><a href="register.html">Sign Up</a></li>
         </ul>
       </nav>
-      <div class="nav-auth">
-        <a href="login.html" class="login-link">Log In</a>
-        <a href="register.html" class="register-link">Sign Up</a>
-      </div>
+      
     </div>
   </header>
 
@@ -392,7 +391,7 @@
       btn.textContent = 'Sending...';
 
       try {
-        const response = await fetch('https://pakistan-explorer-production.up.railway.app/api/auth/contact', {
+        const response = await fetch('https://pakistan-explorer-production.up.railway.app/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

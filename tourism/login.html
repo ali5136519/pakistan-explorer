@@ -213,6 +213,7 @@
 <body>
 
   <!-- ===== HEADER ===== -->
+   <header>
     <div class="nav-wrap">
       <a href="index.html" class="logo">Pakistan<span>Explorer</span></a>
   <button class="hamburger" id="hamburger" onclick="toggleNav()">
@@ -228,20 +229,15 @@
           <li><a href="packages.html">Packages</a></li>
           <li><a href="trip-planner.html">Trip Planner</a></li>
           <li><a href="travel-advisory.html">Advisory</a></li>
-          <li><a href="quiz.html" class=>Quiz</a></li>
-          <li><a href="booking.html"="active">Booking</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="booking.html">Booking</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="review.html">Reviews</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li class="mobile-only"><a href="login.html">Log In</a></li>
-          <li class="mobile-only"><a href="register.html">Sign Up</a></li>
+          <li><a href="login.html">Log In</a></li>
+          <li><a href="register.html">Sign Up</a></li>
         </ul>
-      </nav>
-      <div class="nav-auth">
-        <a href="login.html" class="login-link">Log In</a>
-        <a href="register.html" class="register-link">Sign Up</a>
       </div>
-    </div>
   </header>
   <!-- ===== LOGIN FORM ===== -->
   <div class="auth-wrap">
@@ -406,23 +402,36 @@ ali5136519@gmail.com
           })
         });
 
-        const data = await response.json();
+       const data = await response.json();
 
-        if (response.ok) {
-          localStorage.setItem('pe_token', data.token);
-          localStorage.setItem('pe_user', JSON.stringify(data.user));
-          if (data.user.role === 'admin') {
-            window.location.href = 'admin/admin-dashboard.html';
-          } else {
-            window.location.href = 'index.html';
-          }
+if (response.ok) {
 
-        } else {
-          alert(data.message || 'Login failed. Please try again.');
-          btn.textContent = 'Log In →';
-          btn.disabled = false;
-        }
+  if (data.user.role === 'admin') {
 
+    localStorage.removeItem('pe_token');
+    localStorage.removeItem('pe_user');
+
+    localStorage.setItem('pe_admin_token', data.token);
+    localStorage.setItem('pe_admin_user', JSON.stringify(data.user));
+
+    window.location.href = 'admin/admin-dashboard.html';
+
+  } else {
+
+    localStorage.removeItem('pe_admin_token');
+    localStorage.removeItem('pe_admin_user');
+
+    localStorage.setItem('pe_token', data.token);
+    localStorage.setItem('pe_user', JSON.stringify(data.user));
+
+    window.location.href = 'index.html';
+  }
+
+} else {
+  alert(data.message || 'Login failed. Please try again.');
+  btn.textContent = 'Log In →';
+  btn.disabled = false;
+}
       } catch (error) {
         alert('Cannot connect to server. Please try again.');
         btn.textContent = 'Log In →';
@@ -447,8 +456,6 @@ ali5136519@gmail.com
     }
   });
 </script>
-
-  </script>
 
 </body>
 </html>
