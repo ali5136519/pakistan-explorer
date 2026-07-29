@@ -1,48 +1,38 @@
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
-console.log("✅ emailService loaded");
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbz0t1t-xtA4olS9ae25UcoM2KrjV7UbmY2KwmIPXKVwIyrg1906tmTWJMaPDklQLok4dg/exec";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-
-// User Booking Confirmation
+// ============================
+// USER BOOKING EMAIL
+// ============================
 async function sendBookingConfirmation(booking) {
+
   try {
 
-    await transporter.sendMail({
-      from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
+    await axios.post(SCRIPT_URL, {
       to: booking.email,
       subject: "Booking Confirmation - Pakistan Explorer",
       html: `
-      <h2>Thank you for booking with Pakistan Explorer!</h2>
+        <h2>Thank you for booking with Pakistan Explorer!</h2>
 
-      <p>Dear <b>${booking.name}</b>,</p>
+        <p>Dear <b>${booking.name}</b>,</p>
 
-      <p>Your booking has been received successfully.</p>
+        <p>Your booking has been received successfully.</p>
 
-      <h3>Booking Details</h3>
+        <h3>Booking Details</h3>
 
-      <ul>
-        <li><b>Package:</b> ${booking.packageName}</li>
-        <li><b>Travel Date:</b> ${booking.travelDate}</li>
-        <li><b>Travelers:</b> ${booking.travelers}</li>
-      </ul>
+        <ul>
+          <li><b>Package:</b> ${booking.packageName}</li>
+          <li><b>Travel Date:</b> ${booking.travelDate}</li>
+          <li><b>Travelers:</b> ${booking.travelers}</li>
+        </ul>
 
-      <p>Our team will contact you shortly.</p>
+        <p>Our team will contact you shortly.</p>
 
-      <br>
+        <br>
 
-      <b>Pakistan Explorer Team</b>
+        <b>Pakistan Explorer Team</b>
       `
     });
 
@@ -50,32 +40,35 @@ async function sendBookingConfirmation(booking) {
 
   } catch (err) {
 
-    console.log("❌ User Email Error:", err);
+    console.log("❌ User Email Error:", err.response?.data || err.message);
 
   }
+
 }
 
-// Admin Notification
+// ============================
+// ADMIN BOOKING EMAIL
+// ============================
 async function sendAdminBookingNotification(booking) {
+
   try {
 
-    await transporter.sendMail({
-      from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
+    await axios.post(SCRIPT_URL, {
+      to: "ali5136519@gmail.com",
       subject: "New Booking Received",
       html: `
-      <h2>New Booking Received</h2>
+        <h2>New Booking Received</h2>
 
-      <ul>
-        <li><b>Name:</b> ${booking.name}</li>
-        <li><b>Email:</b> ${booking.email}</li>
-        <li><b>Phone:</b> ${booking.phone}</li>
-        <li><b>City:</b> ${booking.city}</li>
-        <li><b>Package:</b> ${booking.packageName}</li>
-        <li><b>Travel Date:</b> ${booking.travelDate}</li>
-        <li><b>Travelers:</b> ${booking.travelers}</li>
-        <li><b>Total Amount:</b> PKR ${booking.totalAmount}</li>
-      </ul>
+        <ul>
+          <li><b>Name:</b> ${booking.name}</li>
+          <li><b>Email:</b> ${booking.email}</li>
+          <li><b>Phone:</b> ${booking.phone}</li>
+          <li><b>City:</b> ${booking.city}</li>
+          <li><b>Package:</b> ${booking.packageName}</li>
+          <li><b>Date:</b> ${booking.travelDate}</li>
+          <li><b>Travelers:</b> ${booking.travelers}</li>
+          <li><b>Total:</b> PKR ${booking.totalAmount}</li>
+        </ul>
       `
     });
 
@@ -83,9 +76,10 @@ async function sendAdminBookingNotification(booking) {
 
   } catch (err) {
 
-    console.log("❌ Admin Email Error:", err);
+    console.log("❌ Admin Email Error:", err.response?.data || err.message);
 
   }
+
 }
 
 module.exports = {
