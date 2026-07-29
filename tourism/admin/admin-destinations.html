@@ -166,7 +166,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+  const currentUser = JSON.parse(sessionStorage.getItem('pe_admin_user'));
   if (!currentUser || currentUser.role !== 'admin') {
     window.location.href = '../login.html';
   }
@@ -199,13 +199,13 @@
       { name: 'Khunjerab Pass', region: 'Northern', province: 'Gilgit-Baltistan', desc: 'Highest paved international border crossing in the world at 4,693m.' }
     ];
 
-    // LOAD FROM localStorage — agar pehle se saved data hai to woh use karo
+    // LOAD FROM sessionStorage — agar pehle se saved data hai to woh use karo
     // warna default data use karo
-    let destinations = JSON.parse(localStorage.getItem('pe_destinations')) || defaultDestinations;
+    let destinations = JSON.parse(sessionStorage.getItem('pe_destinations')) || defaultDestinations;
 
-    // SAVE TO localStorage
+    // SAVE TO sessionStorage
     function save() {
-      localStorage.setItem('pe_destinations', JSON.stringify(destinations));
+      sessionStorage.setItem('pe_destinations', JSON.stringify(destinations));
     }
 
     // RENDER TABLE — saari destinations table mein dikhao

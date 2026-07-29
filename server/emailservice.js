@@ -1,83 +1,89 @@
 const nodemailer = require("nodemailer");
 
+console.log("✅ emailService loaded");
+
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
 });
 
+// User Booking Confirmation
 async function sendBookingConfirmation(booking) {
-    try {
-        await transporter.sendMail({
-            from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
-            to: booking.email,
-            subject: "Booking Confirmation - Pakistan Explorer",
-            html: `
-                <h2>Thank you for booking with Pakistan Explorer!</h2>
+  try {
 
-                <p>Dear <b>${booking.name}</b>,</p>
+    await transporter.sendMail({
+      from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
+      to: booking.email,
+      subject: "Booking Confirmation - Pakistan Explorer",
+      html: `
+      <h2>Thank you for booking with Pakistan Explorer!</h2>
 
-                <p>Your booking has been received successfully.</p>
+      <p>Dear <b>${booking.name}</b>,</p>
 
-                <h3>Booking Details</h3>
+      <p>Your booking has been received successfully.</p>
 
-                <ul>
-                    <li><b>Package:</b> ${booking.packageName}</li>
-                    <li><b>Travel Date:</b> ${booking.travelDate}</li>
-                    <li><b>Travelers:</b> ${booking.travelers}</li>
-                </ul>
+      <h3>Booking Details</h3>
 
-                <p>Our team will contact you shortly to confirm your booking.</p>
+      <ul>
+        <li><b>Package:</b> ${booking.packageName}</li>
+        <li><b>Travel Date:</b> ${booking.travelDate}</li>
+        <li><b>Travelers:</b> ${booking.travelers}</li>
+      </ul>
 
-                <br>
+      <p>Our team will contact you shortly.</p>
 
-                <b>Pakistan Explorer Team</b>
-            `,
-        });
+      <br>
 
-        console.log("Booking confirmation email sent.");
-    } catch (err) {
-        console.log("User Email Error:", err);
-    }
+      <b>Pakistan Explorer Team</b>
+      `
+    });
+
+    console.log("✅ User email sent");
+
+  } catch (err) {
+
+    console.log("❌ User Email Error:", err);
+
+  }
 }
 
+// Admin Notification
 async function sendAdminBookingNotification(booking) {
-    try {
-        await transporter.sendMail({
-            from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
-            to: process.env.EMAIL_USER,
-            subject: "New Booking Received",
-            html: `
-                <h2>New Booking Received</h2>
+  try {
 
-                <ul>
-                    <li><b>Name:</b> ${booking.name}</li>
-                    <li><b>Email:</b> ${booking.email}</li>
-                    <li><b>Phone:</b> ${booking.phone}</li>
-                    <li><b>City:</b> ${booking.city}</li>
-                    <li><b>Package:</b> ${booking.packageName}</li>
-                    <li><b>Travel Date:</b> ${booking.travelDate}</li>
-                    <li><b>Travelers:</b> ${booking.travelers}</li>
-                    <li><b>Total Amount:</b> PKR ${booking.totalAmount}</li>
-                </ul>
-            `,
-        });
+    await transporter.sendMail({
+      from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      subject: "New Booking Received",
+      html: `
+      <h2>New Booking Received</h2>
 
-        console.log("Admin notification email sent.");
-    } catch (err) {
-        console.log("Admin Email Error:", err);
-    }
+      <ul>
+        <li><b>Name:</b> ${booking.name}</li>
+        <li><b>Email:</b> ${booking.email}</li>
+        <li><b>Phone:</b> ${booking.phone}</li>
+        <li><b>City:</b> ${booking.city}</li>
+        <li><b>Package:</b> ${booking.packageName}</li>
+        <li><b>Travel Date:</b> ${booking.travelDate}</li>
+        <li><b>Travelers:</b> ${booking.travelers}</li>
+        <li><b>Total Amount:</b> PKR ${booking.totalAmount}</li>
+      </ul>
+      `
+    });
+
+    console.log("✅ Admin email sent");
+
+  } catch (err) {
+
+    console.log("❌ Admin Email Error:", err);
+
+  }
 }
 
 module.exports = {
-    sendBookingConfirmation,
-    sendAdminBookingNotification,
+  sendBookingConfirmation,
+  sendAdminBookingNotification
 };

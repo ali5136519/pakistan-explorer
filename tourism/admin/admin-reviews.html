@@ -95,7 +95,7 @@
 
   <script>
     const stars = n => '⭐'.repeat(n) + (n < 5 ? '☆'.repeat(5 - n) : '');
-  const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+  const currentUser = JSON.parse(sessionStorage.getItem('pe_admin_user'));
 if (!currentUser || currentUser.role !== 'admin') {
   window.location.href = '../login.html';
 }
@@ -108,10 +108,10 @@ if (!currentUser || currentUser.role !== 'admin') {
       { name: 'Hira Baig', city: 'Lahore', pkg: 'Murree Family Tour', rating: 4, text: 'Great trip with family. Kids loved the snow and Mall Road. Very well organized by the Pakistan Explorer team.', date: '03 Jul 2026', status: 'Pending' }
     ];
 
-    let reviews = JSON.parse(localStorage.getItem('pe_reviews')) || defaultReviews;
+    let reviews = JSON.parse(sessionStorage.getItem('pe_reviews')) || defaultReviews;
     let currentFilter = 'all';
 
-    function save() { localStorage.setItem('pe_reviews', JSON.stringify(reviews)); }
+    function save() { sessionStorage.setItem('pe_reviews', JSON.stringify(reviews)); }
 
     function updateStats() {
       const approved = reviews.filter(r => r.status === 'Approved').length;
@@ -123,7 +123,7 @@ if (!currentUser || currentUser.role !== 'admin') {
       document.getElementById('review-count').textContent = reviews.length + ' total reviews';
     }
 async function loadReviewsFromDB() {
-  const token = localStorage.getItem('pe_admin_token');
+  const token = sessionStorage.getItem('pe_admin_token');
   if (!token) return;
 
   try {
@@ -151,7 +151,7 @@ async function loadReviewsFromDB() {
     }
 
   } catch (error) {
-    console.log('Loading from localStorage instead');
+    console.log('Loading from sessionStorage instead');
   }
 }
 
@@ -204,7 +204,7 @@ loadReviewsFromDB();
   const review = reviews[index];
 
   try {
-    const token = localStorage.getItem('pe_admin_token');
+    const token = sessionStorage.getItem('pe_admin_token');
     const response = await fetch(
            'https://pakistan-explorer-production.up.railway.app/api/reviews/' + review._id + '/approve',      
       {
@@ -241,7 +241,7 @@ loadReviewsFromDB();
   const name = review.name;
 
   try {
-    const token = localStorage.getItem('pe_admin_token');
+    const token = sessionStorage.getItem('pe_admin_token');
     await fetch(
       'https://pakistan-explorer-production.up.railway.app/api/reviews/' + review._id,
       {

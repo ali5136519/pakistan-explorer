@@ -171,7 +171,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+  const currentUser = JSON.parse(sessionStorage.getItem('pe_admin_user'));
 if (!currentUser || currentUser.role !== 'admin') {
   window.location.href = '../login.html';
 }
@@ -205,9 +205,9 @@ if (!currentUser || currentUser.role !== 'admin') {
 
     const catColors = { Family: 'badge-info', Honeymoon: 'badge-danger', Historical: 'badge-warning', Student: 'badge-success', Adventure: 'badge-info' };
 
-    let packages = JSON.parse(localStorage.getItem('pe_packages')) || defaultPackages;
+    let packages = JSON.parse(sessionStorage.getItem('pe_packages')) || defaultPackages;
 
-    function save() { localStorage.setItem('pe_packages', JSON.stringify(packages)); }
+    function save() { sessionStorage.setItem('pe_packages', JSON.stringify(packages)); }
 
     function renderTable(data) {
       document.getElementById('pkg-count').textContent = data.length + ' packages';

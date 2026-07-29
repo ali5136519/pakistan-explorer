@@ -626,7 +626,7 @@ ali5136519@gmail.com
       if (isValid) {
 
         
-        const token = localStorage.getItem('pe_token');
+        const token = sessionStorage.getItem('pe_token');
 
         if (!token) {
           alert('Please login first to make a booking.');
@@ -697,8 +697,8 @@ ali5136519@gmail.com
           } else if (response.status === 401) {
            
             alert('Session expired. Please login again.');
-            localStorage.removeItem('pe_token');
-            localStorage.removeItem('pe_user');
+            sessionStorage.removeItem('pe_token');
+            sessionStorage.removeItem('pe_user');
             window.location.href = 'login.html';
 
           } else {

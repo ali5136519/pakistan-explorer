@@ -74,8 +74,9 @@ router.post('/', verifyToken, async (req, res) => {
       message: "Booking submitted successfully",
       booking
     });
-
+console.log("AFTER RESPONSE");
     // Send admin email in background
+    console.log("Before Admin Email");
     sendAdminBookingNotification({
       name: fullName,
       email: email,
@@ -94,6 +95,7 @@ router.post('/', verifyToken, async (req, res) => {
       });
 
     // Send user confirmation email in background
+    console.log("Before User Email");
     sendBookingConfirmation({
       name: fullName,
       email: email,

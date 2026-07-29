@@ -104,7 +104,7 @@
   </div>
 
   <script>
-const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+const currentUser = JSON.parse(sessionStorage.getItem('pe_admin_user'));
   if (!currentUser || currentUser.role !== 'admin') {
     window.location.href = '../login.html';
   }
@@ -136,11 +136,11 @@ const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
       {name:'Zain ul Abideen',pkg:'Skardu & Deosai',rating:5,status:'Pending'}
     ];
 
-    const destinations = JSON.parse(localStorage.getItem('pe_destinations')) || defaultDestinations;
-    const packages = JSON.parse(localStorage.getItem('pe_packages')) || defaultPackages;
-    const bookings = JSON.parse(localStorage.getItem('pe_bookings')) || defaultBookings;
-    const users = JSON.parse(localStorage.getItem('pe_users')) || defaultUsers;
-    const reviews = JSON.parse(localStorage.getItem('pe_reviews')) || defaultReviews;
+    const destinations = JSON.parse(sessionStorage.getItem('pe_destinations')) || defaultDestinations;
+    const packages = JSON.parse(sessionStorage.getItem('pe_packages')) || defaultPackages;
+    const bookings = JSON.parse(sessionStorage.getItem('pe_bookings')) || defaultBookings;
+    const users = JSON.parse(sessionStorage.getItem('pe_users')) || defaultUsers;
+    const reviews = JSON.parse(sessionStorage.getItem('pe_reviews')) || defaultReviews;
 
     document.getElementById('stat-dest').textContent = destinations.length;
     document.getElementById('stat-pkg').textContent = packages.length;
@@ -172,7 +172,7 @@ const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
         `).join('')
       : '<tr><td colspan="4" style="text-align:center;padding:24px;color:#888;">No pending reviews</td></tr>';
   async function loadDashboardStats() {
- const token = localStorage.getItem('pe_admin_token');
+ const token = sessionStorage.getItem('pe_admin_token');
   if (!token) return;
 
   try {

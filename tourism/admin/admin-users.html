@@ -103,7 +103,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-  const currentUser = JSON.parse(localStorage.getItem('pe_admin_user'));
+  const currentUser = JSON.parse(sessionStorage.getItem('pe_admin_user'));
 if (!currentUser || currentUser.role !== 'admin') {
   window.location.href = '../login.html';
 }
@@ -121,7 +121,7 @@ if (!currentUser || currentUser.role !== 'admin') {
     let currentFilter = 'all';
     async function loadUsersFromDB() {
 
-  const token = localStorage.getItem('pe_admin_token');
+  const token = sessionStorage.getItem('pe_admin_token');
 
   if (!token) return;
 
@@ -163,7 +163,7 @@ if (!currentUser || currentUser.role !== 'admin') {
 
 }
 
-    function save() { localStorage.setItem('pe_users', JSON.stringify(users)); }
+    function save() { sessionStorage.setItem('pe_users', JSON.stringify(users)); }
 
     function updateStats() {
       document.getElementById('count-active').textContent = users.filter(u => u.status === 'Active').length;
