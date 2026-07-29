@@ -9,8 +9,9 @@ const SCRIPT_URL =
 async function sendBookingConfirmation(booking) {
 
   try {
-
-    await axios.post(SCRIPT_URL, {
+const response = await axios.post(
+  SCRIPT_URL,
+  {
       to: booking.email,
       subject: "Booking Confirmation - Pakistan Explorer",
       html: `
@@ -34,7 +35,14 @@ async function sendBookingConfirmation(booking) {
 
         <b>Pakistan Explorer Team</b>
       `
-    });
+      },
+  {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }
+);
+console.log("User Apps Script Response:", response.data);
 
     console.log("✅ User email sent");
 
@@ -53,7 +61,9 @@ async function sendAdminBookingNotification(booking) {
 
   try {
 
-    await axios.post(SCRIPT_URL, {
+    const response = await axios.post(
+  SCRIPT_URL,
+  {
       to: "ali5136519@gmail.com",
       subject: "New Booking Received",
       html: `
@@ -70,7 +80,14 @@ async function sendAdminBookingNotification(booking) {
           <li><b>Total:</b> PKR ${booking.totalAmount}</li>
         </ul>
       `
-    });
+      },
+  {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }
+);
+console.log("Admin Apps Script Response:", response.data);
 
     console.log("✅ Admin email sent");
 
