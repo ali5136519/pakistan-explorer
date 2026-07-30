@@ -1,93 +1,77 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+const {
+  sendContactAutoReply,
+  sendAdminContactNotification
+} = require('../emailservice');
+
 router.post('/', async (req, res) => {
 
-    try {
+  try {
 
-        const {
-            name,
-            email,
-            phone,
-            subject,
-            message
-        } = req.body;
+    const {
+      name,
+      email,
+      phone,
+      subject,
+      message
+    } = req.body;
 
-        // Admin Email
+    // User ko turant response
+    res.json({
+      message: "Message sent successfully"
+    });
 
-        await transporter.sendMail({
+    console.log("AFTER CONTACT RESPONSE");
 
-            from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
+    // ==========================
+    // Admin Email
+    // ==========================
 
-            to: process.env.EMAIL_USER,
+    console.log("Before Admin Contact Email");
 
-            subject: `Contact Form - ${subject}`,
+    sendAdminContactNotification({
+      name,
+      email,
+      phone,
+      subject,
+      message
+    })
+      .then(() => {
+        console.log("Admin contact email sent");
+      })
+      .catch(err => {
+        console.log("Admin Contact Email Error:", err);
+      });
 
-            html: `
-                <h2>New Contact Message</h2>
+    // ==========================
+    // User Auto Reply
+    // ==========================
 
-                <p><b>Name:</b> ${name}</p>
-                <p><b>Email:</b> ${email}</p>
-                <p><b>Phone:</b> ${phone}</p>
-                <p><b>Subject:</b> ${subject}</p>
+    console.log("Before User Contact Email");
 
-                <p><b>Message:</b></p>
+    sendContactAutoReply({
+      name,
+      email
+    })
+      .then(() => {
+        console.log("User contact email sent");
+      })
+      .catch(err => {
+        console.log("User Contact Email Error:", err);
+      });
 
-                <p>${message}</p>
-            `
-        });
+  } catch (error) {
 
-        // User Auto Reply
-        await transporter.sendMail({
+    console.log(error);
 
-            from: `"Pakistan Explorer" <${process.env.EMAIL_USER}>`,
+    return res.status(500).json({
+      message: "Server error",
+      error: error.message
+    });
 
-            to: email,
-
-            subject: "Thank You for Contacting Pakistan Explorer",
-
-            html: `
-                <h2>Thank You!</h2>
-
-                <p>Dear <b>${name}</b>,</p>
-
-                <p>We have received your message successfully.</p>
-
-                <p>Our team will contact you as soon as possible.</p>
-
-                <br>
-
-                <b>Pakistan Explorer Team</b>
-            `
-        });
-
-        res.json({
-            message: "Message sent successfully"
-        });
-
-    } catch (err) {
-
-        console.log(err);
-
-        res.status(500).json({
-            message: "Email sending failed"
-        });
-
-    }
+  }
 
 });
 

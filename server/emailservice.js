@@ -1,17 +1,16 @@
 const axios = require("axios");
 
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxUfGaLh7McVhegc93XPJLR8LCfZFkEOCbCRDjxJf-tIuwzB0S6O5saqDEKncLNp1Z2jw/exec";
+"https://script.google.com/macros/s/AKfycbxSpZbH_9-_EbYfNBpaUPtp-XWUDwKjl_q78k5wejoCn7as3PI_ATEE6Rjyx2ueNJk5OQ/exec";
 
-// ============================
-// USER BOOKING EMAIL
-// ============================
+// =======================================================
+// BOOKING - USER EMAIL
+// =======================================================
 async function sendBookingConfirmation(booking) {
 
   try {
-const response = await axios.post(
-  SCRIPT_URL,
-  {
+
+    const response = await axios.post(SCRIPT_URL, {
       to: booking.email,
       subject: "Booking Confirmation - Pakistan Explorer",
       html: `
@@ -35,35 +34,27 @@ const response = await axios.post(
 
         <b>Pakistan Explorer Team</b>
       `
-      },
-  {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }
-);
-console.log("User Apps Script Response:", response.data);
+    });
 
-    console.log("✅ User email sent");
+    console.log("User Apps Script Response:", response.data);
+    console.log("✅ User booking email sent");
 
   } catch (err) {
 
-    console.log("❌ User Email Error:", err.response?.data || err.message);
+    console.log("❌ User Booking Email Error:", err.response?.data || err.message);
 
   }
 
 }
 
-// ============================
-// ADMIN BOOKING EMAIL
-// ============================
+// =======================================================
+// BOOKING - ADMIN EMAIL
+// =======================================================
 async function sendAdminBookingNotification(booking) {
 
   try {
 
-    const response = await axios.post(
-  SCRIPT_URL,
-  {
+    const response = await axios.post(SCRIPT_URL, {
       to: "ali5136519@gmail.com",
       subject: "New Booking Received",
       html: `
@@ -80,20 +71,85 @@ async function sendAdminBookingNotification(booking) {
           <li><b>Total:</b> PKR ${booking.totalAmount}</li>
         </ul>
       `
-      },
-  {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }
-);
-console.log("Admin Apps Script Response:", response.data);
+    });
 
-    console.log("✅ Admin email sent");
+    console.log("Admin Apps Script Response:", response.data);
+    console.log("✅ Admin booking email sent");
 
   } catch (err) {
 
-    console.log("❌ Admin Email Error:", err.response?.data || err.message);
+    console.log("❌ Admin Booking Email Error:", err.response?.data || err.message);
+
+  }
+
+}
+
+// =======================================================
+// CONTACT - USER AUTO REPLY
+// =======================================================
+async function sendContactAutoReply(contact) {
+
+  try {
+
+    const response = await axios.post(SCRIPT_URL, {
+      to: contact.email,
+      subject: "Thank You for Contacting Pakistan Explorer",
+      html: `
+        <h2>Thank You!</h2>
+
+        <p>Dear <b>${contact.name}</b>,</p>
+
+        <p>We have received your message successfully.</p>
+
+        <p>Our team will contact you as soon as possible.</p>
+
+        <br>
+
+        <b>Pakistan Explorer Team</b>
+      `
+    });
+
+    console.log("User Contact Response:", response.data);
+    console.log("✅ User contact email sent");
+
+  } catch (err) {
+
+    console.log("❌ User Contact Email Error:", err.response?.data || err.message);
+
+  }
+
+}
+
+// =======================================================
+// CONTACT - ADMIN EMAIL
+// =======================================================
+async function sendAdminContactNotification(contact) {
+
+  try {
+
+    const response = await axios.post(SCRIPT_URL, {
+      to: "ali5136519@gmail.com",
+      subject: `Contact Form - ${contact.subject}`,
+      html: `
+        <h2>New Contact Message</h2>
+
+        <p><b>Name:</b> ${contact.name}</p>
+        <p><b>Email:</b> ${contact.email}</p>
+        <p><b>Phone:</b> ${contact.phone}</p>
+        <p><b>Subject:</b> ${contact.subject}</p>
+
+        <p><b>Message:</b></p>
+
+        <p>${contact.message}</p>
+      `
+    });
+
+    console.log("Admin Contact Response:", response.data);
+    console.log("✅ Admin contact email sent");
+
+  } catch (err) {
+
+    console.log("❌ Admin Contact Email Error:", err.response?.data || err.message);
 
   }
 
@@ -101,5 +157,7 @@ console.log("Admin Apps Script Response:", response.data);
 
 module.exports = {
   sendBookingConfirmation,
-  sendAdminBookingNotification
+  sendAdminBookingNotification,
+  sendContactAutoReply,
+  sendAdminContactNotification
 };
