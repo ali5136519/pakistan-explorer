@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbyAoQ0KuGxaydw6rP8vq4Zv3i-6hPRgfqhCuYUjVAGSvEv52YK4LIHSSp6DiNmV5DQiVw/exec";
+"https://script.google.com/macros/s/AKfycbxSpZbH_9-_EbYfNBpaUPtp-XWUDwKjl_q78k5wejoCn7as3PI_ATEE6Rjyx2ueNJk5OQ/exec";
 
 // ============================
 // USER BOOKING EMAIL
