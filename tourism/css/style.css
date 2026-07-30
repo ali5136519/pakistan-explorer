@@ -437,7 +437,11 @@ footer {
   .footer-grid { grid-template-columns: 1fr; }
 }
 
-/* Desktop humberger hide */
-.hamburger { display: none; }
+/* Desktop hamburger hide */
+@media (min-width: 769px) {
+  .hamburger {
+    display: none;
+  }
+}
 
 
