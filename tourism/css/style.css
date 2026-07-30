@@ -24,7 +24,7 @@
   --shadow-card: 0 10px 30px rgba(22, 48, 42, 0.12);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
 
 body {
@@ -34,7 +34,7 @@ body {
   line-height: 1.6;
 }
 
-img { max-width: 100%; display: block; }
+img { max-width: 100%; display: block;  height:auto;}
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
@@ -442,6 +442,55 @@ footer {
   .hamburger {
     display: none;
   }
+}
+
+/* =======================================================
+   PERFORMANCE OPTIMIZATION
+======================================================= */
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+}
+
+img,
+.card,
+.card img,
+.hero,
+section,
+header,
+nav,
+footer{
+    transform:translateZ(0);
+    backface-visibility:hidden;
+}
+
+.card{
+    will-change:transform;
+}
+
+.card img{
+    will-change:transform;
+}
+
+.hero{
+    will-change:transform;
+}
+
+button,
+a,
+.btn{
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        transform .25s ease,
+        box-shadow .25s ease;
 }
 
 
