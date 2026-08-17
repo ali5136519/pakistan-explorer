@@ -18,14 +18,13 @@ router.post('/', async (req, res) => {
       message
     } = req.body;
 
-    // User ko turant response
+    // immediately response to user
     res.json({
       message: "Message sent successfully"
     });
 
     console.log("AFTER CONTACT RESPONSE");
 
-    // ==========================
     // Admin Email
     // ==========================
 
@@ -45,7 +44,7 @@ router.post('/', async (req, res) => {
         console.log("Admin Contact Email Error:", err);
       });
 
-    // ==========================
+    
     // User Auto Reply
     // ==========================
 

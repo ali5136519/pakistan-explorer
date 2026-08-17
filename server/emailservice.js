@@ -3,7 +3,6 @@ const axios = require("axios");
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyxsXANLPg8krSSVpGd4SrS36u3YtqGJHkVnIqfZmEoyZR_RnTjnIJVpku2bBThcj4qPQ/exec";
 
-// =======================================================
 // BOOKING - USER EMAIL
 // =======================================================
 async function sendBookingConfirmation(booking) {
@@ -47,7 +46,6 @@ async function sendBookingConfirmation(booking) {
 
 }
 
-// =======================================================
 // BOOKING - ADMIN EMAIL
 // =======================================================
 async function sendAdminBookingNotification(booking) {
@@ -84,7 +82,6 @@ async function sendAdminBookingNotification(booking) {
 
 }
 
-// =======================================================
 // CONTACT - USER AUTO REPLY
 // =======================================================
 async function sendContactAutoReply(contact) {
@@ -120,7 +117,6 @@ async function sendContactAutoReply(contact) {
 
 }
 
-// =======================================================
 // CONTACT - ADMIN EMAIL
 // =======================================================
 async function sendAdminContactNotification(contact) {
