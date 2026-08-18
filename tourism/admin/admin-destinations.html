@@ -199,8 +199,7 @@
       { name: 'Khunjerab Pass', region: 'Northern', province: 'Gilgit-Baltistan', desc: 'Highest paved international border crossing in the world at 4,693m.' }
     ];
 
-    // LOAD FROM sessionStorage — agar pehle se saved data hai to woh use karo
-    // warna default data use karo
+    // LOAD FROM sessionStorage//
     let destinations = JSON.parse(sessionStorage.getItem('pe_destinations')) || defaultDestinations;
 
     // SAVE TO sessionStorage
@@ -208,8 +207,8 @@
       sessionStorage.setItem('pe_destinations', JSON.stringify(destinations));
     }
 
-    // RENDER TABLE — saari destinations table mein dikhao
-    function renderTable(data) {
+    // RENDER TABLE — 
+        function renderTable(data) {
       const tbody = document.getElementById('dest-tbody');
       document.getElementById('dest-count').textContent = data.length + ' destinations';
 
@@ -335,14 +334,14 @@
       setTimeout(() => { toast.className = 'toast'; }, 3000);
     }
 
-    // Background click se modal band
+    // Background click then modal off
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', function(e) {
         if (e.target === this) this.classList.remove('open');
       });
     });
 
-    // PAGE LOAD pe table render karo
+    // PAGE LOAD then table render
     renderTable(destinations);
   </script>
 
